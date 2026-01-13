@@ -1,16 +1,47 @@
-# amazon_clone
+# 🚀 MarketHub - Premium Multi-Vendor Marketplace
 
-A new Flutter project.
+MarketHub is a production-grade, full-stack E-commerce platform built with **Flutter**, **Node.js**, **Express**, and **MongoDB**. It features a high-end design system, role-based access control, and advanced moderation tools.
 
-## Getting Started
+## ✨ Features
 
-This project is a starting point for a Flutter application.
+### 🛒 Buyer Experience
+- **Premium Discovery**: Modern home screen with personalized welcomes and smart search.
+- **Interactive Details**: Luxury product pages with trust badges and detailed specifications.
+- **Seamless Checkout**: Polished cart management and intuitive multi-step shipping/payment flow.
 
-A few resources to get you started if this is your first Flutter project:
+### 🏪 Seller Studio
+- **Inventory Control**: Easy product listing with category management.
+- **Business Insights**: Real-time sales analytics and order tracking.
+- **Verified Status**: Marketplace trust through admin verification.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### 🛡️ Admin Moderation
+- **Platform Oversight**: High-level GMV, User growth, and Order volume tracking.
+- **Vendor Management**: Review and verify newly registered sellers.
+- **Content Moderation**: Global product review and moderation capabilities.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🛠️ Tech Stack
+- **Frontend**: Flutter (Provider for State Management)
+- **Backend**: Node.js & Express.js
+- **Database**: MongoDB (Mongoose ODM)
+- **Styling**: Modern Indigo & Cyan Gradient Design System
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Flutter SDK
+- Node.js
+- MongoDB Connection String
+
+### Backend Setup
+1. Navigate to `/server`.
+2. Create a `.env` file with `DB` (MongoDB URI) and `PORT` variables.
+3. Run `npm install`.
+4. Run `npm start`.
+
+### Frontend Setup
+1. Update `GlobalVariables.uri` in `lib/constants/global_variables.dart` with your server address.
+2. Run `flutter pub get`.
+3. Run `flutter run`.
+
+---
+*Built with ❤️ by Antigravity AI*

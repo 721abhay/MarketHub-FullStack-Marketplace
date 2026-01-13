@@ -1,8 +1,13 @@
+import 'dart:convert';
 import 'package:amazon_clone/common/widgets/custom_button.dart';
 import 'package:amazon_clone/common/widgets/custom_textfield.dart';
+import 'package:amazon_clone/constants/error_handling.dart';
 import 'package:amazon_clone/constants/global_variables.dart';
+import 'package:amazon_clone/constants/utils.dart';
+import 'package:amazon_clone/features/address/services/address_services.dart';
 import 'package:amazon_clone/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 class AddressScreen extends StatefulWidget {
@@ -17,13 +22,56 @@ class AddressScreen extends StatefulWidget {
   State<AddressScreen> createState() => _AddressScreenState();
 }
 
+class _OrderDetailSuccessDialog extends StatelessWidget {
+  final String total;
+  const _OrderDetailSuccessDialog({required this.total});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      title: const Text('Order Placed!', style: TextStyle(fontWeight: FontWeight.bold)),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.check_circle_rounded, color: Color(0xFF10B981), size: 80),
+          const SizedBox(height: 20),
+          Text(
+            'Woohoo! Your order of \$$total has been placed successfully.',
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Color(0xFF64748B)),
+          ),
+        ],
+      ),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.all(12),
+          child: CustomButton(
+            text: 'Done',
+            onTap: () {
+              Navigator.popUntil(context, (route) => route.isFirst);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class _AddressScreenState extends State<AddressScreen> {
   final TextEditingController flatBuildingController = TextEditingController();
   final TextEditingController areaController = TextEditingController();
   final TextEditingController pincodeController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
+  final TextEditingController _promoController = TextEditingController();
   final _addressFormKey = GlobalKey<FormState>();
+  
   String paymentMethod = 'card';
+  double discountAmount = 0;
+  String appliedPromo = '';
+  bool _isCheckingPromo = false;
+
+  final AddressServices addressServices = AddressServices();
 
   @override
   void dispose() {
@@ -32,47 +80,79 @@ class _AddressScreenState extends State<AddressScreen> {
     areaController.dispose();
     pincodeController.dispose();
     cityController.dispose();
+    _promoController.dispose();
+  }
+
+  void validatePromo() async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final code = _promoController.text.trim();
+    if (code.isEmpty) return;
+
+    setState(() => _isCheckingPromo = true);
+
+    try {
+      http.Response res = await http.post(
+        Uri.parse('${GlobalVariables.uri}/api/promo/validate'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+        body: jsonEncode({
+          'code': code,
+        }),
+      );
+
+      if (!context.mounted) return;
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          final promo = jsonDecode(res.body);
+          final double subtotal = double.parse(widget.totalAmount);
+          double discount = (subtotal * promo['discountPercent']) / 100;
+          if (promo['maxDiscount'] != null && discount > promo['maxDiscount']) {
+            discount = (promo['maxDiscount'] as num).toDouble();
+          }
+          setState(() {
+            discountAmount = discount;
+            appliedPromo = code;
+          });
+          showSnackBar(context, 'Promo code applied! Saved \$${discount.toStringAsFixed(2)}');
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    } finally {
+      if (mounted) setState(() => _isCheckingPromo = false);
+    }
   }
 
   void onOrderPressed() {
     if (_addressFormKey.currentState!.validate()) {
-      Provider.of<UserProvider>(context, listen: false).clearCart();
+      String addressToBeUsed = 
+        '${flatBuildingController.text}, ${areaController.text}, ${cityController.text} - ${pincodeController.text}';
+      
+      double finalTotal = double.parse(widget.totalAmount) - discountAmount;
+
+      addressServices.placeOrder(
+        context: context, 
+        address: addressToBeUsed, 
+        totalSum: finalTotal,
+      );
+
       showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) => AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-          title: const Text('Order Placed!', style: TextStyle(fontWeight: FontWeight.bold)),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.check_circle_rounded, color: Color(0xFF10B981), size: 80),
-              const SizedBox(height: 20),
-              Text(
-                'Woohoo! Your order of \$${widget.totalAmount} has been placed successfully.',
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: Color(0xFF64748B)),
-              ),
-            ],
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: CustomButton(
-                text: 'Done',
-                onTap: () {
-                  Navigator.popUntil(context, (route) => route.isFirst);
-                },
-              ),
-            ),
-          ],
-        ),
+        builder: (context) => _OrderDetailSuccessDialog(total: finalTotal.toStringAsFixed(2)),
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    double subtotal = double.parse(widget.totalAmount);
+    double finalTotal = subtotal - discountAmount;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: PreferredSize(
@@ -87,6 +167,10 @@ class _AddressScreenState extends State<AddressScreen> {
           title: const Text(
             'Shipping Details',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+            onPressed: () => Navigator.pop(context),
           ),
         ),
       ),
@@ -121,6 +205,44 @@ class _AddressScreenState extends State<AddressScreen> {
               ),
               const SizedBox(height: 32),
               const Text(
+                'Apply Promo Code',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1E293B)),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: const Offset(0, 4))],
+                      ),
+                      child: CustomTextField(
+                        controller: _promoController,
+                        hintText: 'Enter code (e.g. WELCOME40)',
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  SizedBox(
+                    height: 56,
+                    child: ElevatedButton(
+                      onPressed: _isCheckingPromo ? null : validatePromo,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF1E293B),
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      ),
+                      child: _isCheckingPromo 
+                        ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                        : const Text('Apply'),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 32),
+              const Text(
                 'Payment Method',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1E293B)),
               ),
@@ -142,7 +264,11 @@ class _AddressScreenState extends State<AddressScreen> {
                 ),
                 child: Column(
                   children: [
-                    _buildSummaryRow('Subtotal', '\$${widget.totalAmount}'),
+                    _buildSummaryRow('Subtotal', '\$${subtotal.toStringAsFixed(2)}'),
+                    if (discountAmount > 0) ...[
+                      const SizedBox(height: 8),
+                      _buildSummaryRow('Promo Discount ($appliedPromo)', '-\$${discountAmount.toStringAsFixed(2)}', isPromo: true),
+                    ],
                     const SizedBox(height: 8),
                     _buildSummaryRow('Shipping Fee', 'FREE', isFree: true),
                     const Divider(height: 32),
@@ -151,7 +277,7 @@ class _AddressScreenState extends State<AddressScreen> {
                       children: [
                         const Text('Total', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                         Text(
-                          '\$${widget.totalAmount}',
+                          '\$${finalTotal.toStringAsFixed(2)}',
                           style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF6366F1)),
                         ),
                       ],
@@ -219,7 +345,7 @@ class _AddressScreenState extends State<AddressScreen> {
     );
   }
 
-  Widget _buildSummaryRow(String label, String value, {bool isFree = false}) {
+  Widget _buildSummaryRow(String label, String value, {bool isFree = false, bool isPromo = false}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -228,7 +354,7 @@ class _AddressScreenState extends State<AddressScreen> {
           value,
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: isFree ? const Color(0xFF10B981) : const Color(0xFF1E293B),
+            color: isFree ? const Color(0xFF10B981) : (isPromo ? const Color(0xFFEF4444) : const Color(0xFF1E293B)),
           ),
         ),
       ],

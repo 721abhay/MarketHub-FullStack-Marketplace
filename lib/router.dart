@@ -4,7 +4,11 @@ import 'package:amazon_clone/features/address/screens/address_screen.dart';
 import 'package:amazon_clone/features/home/screens/category_deals_screen.dart';
 import 'package:amazon_clone/features/order_details/screens/order_details_screen.dart';
 import 'package:amazon_clone/features/account/screens/your_orders_screen.dart';
+import 'package:amazon_clone/features/ai_chat/screens/ai_chat_screen.dart';
+import 'package:amazon_clone/features/seller/screens/seller_payout_screen.dart';
 import 'package:amazon_clone/features/account/screens/addresses_screen.dart';
+import 'package:amazon_clone/features/account/screens/notifications_screen.dart';
+import 'package:amazon_clone/features/account/screens/wallet_screen.dart';
 import 'package:amazon_clone/models/order.dart';
 import 'package:amazon_clone/features/home/screens/home_screen.dart';
 import 'package:amazon_clone/features/product_details/screens/product_details_screen.dart';
@@ -74,6 +78,26 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
       return MaterialPageRoute(
         settings: routeSettings,
         builder: (_) => const AddressesScreen(),
+      );
+    case NotificationsScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => const NotificationsScreen(),
+      );
+    case AIChatScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => const AIChatScreen(),
+      );
+    case WalletScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => const WalletScreen(),
+      );
+    case SellerPayoutScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => const SellerPayoutScreen(),
       );
     case HomeScreen.routeName:
       return MaterialPageRoute(

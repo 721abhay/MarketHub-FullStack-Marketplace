@@ -19,6 +19,23 @@ class GlobalVariables {
   static var selectedNavBarColor = const Color(0xFF6366F1);
   static const unselectedNavBarColor = Color(0xFF64748B); // Slate 500
 
+  // Phase 4: Glassmorphism Tokens
+  static BoxDecoration glassmorphicDecoration = BoxDecoration(
+    color: Colors.white.withOpacity(0.4),
+    borderRadius: BorderRadius.circular(24),
+    border: Border.all(color: Colors.white.withOpacity(0.4), width: 1.5),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.black.withOpacity(0.05),
+        blurRadius: 20,
+        offset: const Offset(0, 10),
+      ),
+    ],
+  );
+
+  static Color glassColor = Colors.white.withOpacity(0.2);
+  static double glassBlur = 10.0;
+
   // STATIC IMAGES
   static const List<Map<String, String>> categoryImages = [
     {

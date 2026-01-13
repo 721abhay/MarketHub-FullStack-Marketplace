@@ -8,6 +8,9 @@ const authRouter = require('./routes/auth');
 const adminRouter = require('./routes/admin');
 const sellerRouter = require('./routes/seller');
 const productRouter = require('./routes/product');
+const userRouter = require('./routes/user');
+const aiRouter = require('./routes/ai');
+const promoRouter = require('./routes/promo');
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -19,6 +22,9 @@ app.use(authRouter);
 app.use(adminRouter);
 app.use(sellerRouter);
 app.use(productRouter);
+app.use(userRouter);
+app.use(aiRouter);
+app.use(promoRouter);
 
 // Test route
 app.get('/', (req, res) => {

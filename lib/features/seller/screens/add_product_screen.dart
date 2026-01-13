@@ -119,40 +119,34 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       )
                     : GestureDetector(
                         onTap: selectImages,
-                        child: DottedBorder(
-                          borderType: BorderType.RRect,
-                          radius: const Radius.circular(16),
-                          dashPattern: const [10, 4],
-                          strokeCap: StrokeCap.round,
-                          color: const Color(0xFF6366F1),
-                          child: Container(
+                        child: Container(
                             width: double.infinity,
                             height: 150,
                             decoration: BoxDecoration(
                               color: const Color(0xFFEEF2FF),
                               borderRadius: BorderRadius.circular(16),
+                              border: Border.all(color: const Color(0xFF6366F1), style: BorderStyle.solid),
                             ),
-                            child: Column(
+                            child: const Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(
+                                Icon(
                                   Icons.cloud_upload_outlined,
                                   size: 40,
                                   color: Color(0xFF6366F1),
                                 ),
-                                const SizedBox(height: 15),
+                                SizedBox(height: 15),
                                 Text(
                                   'Select Product Images',
                                   style: TextStyle(
                                     fontSize: 15,
-                                    color: Colors.grey.shade600,
+                                    color: Color(0xFF64748B),
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
                       ),
                 const SizedBox(height: 32),
                 CustomTextField(

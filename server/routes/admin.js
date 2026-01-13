@@ -1,9 +1,12 @@
 const express = require("express");
 const adminRouter = express.Router();
 const { Product } = require("../models/product");
+const admin = require("../middlewares/admin");
+const User = require("../models/user");
+const Order = require("../models/order");
 
-// Add Product (Admin can also add featured products)
-adminRouter.post("/admin/add-product", async (req, res) => {
+// Add Product
+adminRouter.post("/admin/add-product", admin, async (req, res) => {
     try {
         const { name, description, images, quantity, price, category, sellerId } = req.body;
         let product = new Product({
@@ -13,7 +16,7 @@ adminRouter.post("/admin/add-product", async (req, res) => {
             quantity,
             price,
             category,
-            sellerId: sellerId || req.user, // Fallback if admin is adding on behalf
+            sellerId: sellerId || req.user,
         });
         product = await product.save();
         res.json(product);
@@ -23,7 +26,7 @@ adminRouter.post("/admin/add-product", async (req, res) => {
 });
 
 // Get all products for moderation
-adminRouter.get("/admin/get-products", async (req, res) => {
+adminRouter.get("/admin/get-products", admin, async (req, res) => {
     try {
         const products = await Product.find({});
         res.json(products);
@@ -32,11 +35,8 @@ adminRouter.get("/admin/get-products", async (req, res) => {
     }
 });
 
-const User = require("../models/user");
-const Order = require("../models/order");
-
 // Get all users/sellers
-adminRouter.get("/admin/get-users", async (req, res) => {
+adminRouter.get("/admin/get-users", admin, async (req, res) => {
     try {
         const users = await User.find({});
         res.json(users);
@@ -46,7 +46,7 @@ adminRouter.get("/admin/get-users", async (req, res) => {
 });
 
 // Update Seller Verification Status
-adminRouter.post("/admin/verify-seller", async (req, res) => {
+adminRouter.post("/admin/verify-seller", admin, async (req, res) => {
     try {
         const { id, isVerified } = req.body;
         let user = await User.findById(id);
@@ -61,7 +61,7 @@ adminRouter.post("/admin/verify-seller", async (req, res) => {
 });
 
 // Get Platform Analytics
-adminRouter.get("/admin/analytics", async (req, res) => {
+adminRouter.get("/admin/analytics", admin, async (req, res) => {
     try {
         const orders = await Order.find({});
         const users = await User.find({});
@@ -86,7 +86,7 @@ adminRouter.get("/admin/analytics", async (req, res) => {
 });
 
 // Delete Product
-adminRouter.post("/admin/delete-product", async (req, res) => {
+adminRouter.post("/admin/delete-product", admin, async (req, res) => {
     try {
         const { id } = req.body;
         let product = await Product.findByIdAndDelete(id);

@@ -1,3 +1,4 @@
+import 'package:amazon_clone/features/account/screens/notifications_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:amazon_clone/constants/global_variables.dart';
 import 'package:amazon_clone/features/home/widgets/address_box.dart';
@@ -8,6 +9,7 @@ import 'package:amazon_clone/features/home/widgets/top_categories.dart';
 import 'package:amazon_clone/features/search/screens/search_screen.dart';
 import 'package:amazon_clone/models/product.dart';
 import 'package:amazon_clone/providers/user_provider.dart';
+import 'package:amazon_clone/providers/localization_provider.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -23,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
   }
 
-  // Mock products for the showcase
+  // Showcase Products (Mock/Fallbacks)
   final List<Product> phoneDeals = [
     Product(
       name: 'iPhone 15 Pro Max',
@@ -57,32 +59,15 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
   ];
 
-  final List<Product> fashionDeals = [
-    Product(
-      name: 'Men\'s Running Shoes',
-      description: 'Comfortable and durable',
-      quantity: 20,
-      images: ['https://images.unsplash.com/photo-1542291026-7eec264c274f?q=80&w=400&auto=format&fit=crop'],
-      category: 'Fashion',
-      price: 59,
-      id: 'f1',
-      rating: [],
-    ),
-    Product(
-      name: 'Casual Cotton Tee',
-      description: 'Perfect for summer',
-      quantity: 50,
-      images: ['https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=400&auto=format&fit=crop'],
-      category: 'Fashion',
-      price: 19,
-      id: 'f2',
-      rating: [],
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     final user = context.watch<UserProvider>().user;
+    final localization = context.watch<LocalizationProvider>();
+
+    // Map recently viewed to Product objects
+    List<Product> recentlyViewedProducts = user.recentlyViewed.map((item) {
+      return Product.fromMap(item['product']);
+    }).toList();
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
@@ -114,9 +99,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: TextFormField(
                     onFieldSubmitted: navigateToSearchScreen,
                     decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.search_rounded, color: Color(0xFF6366F1)),
-                      hintText: 'Search products...',
-                      hintStyle: TextStyle(fontSize: 15, color: Color(0xFF94A3B8)),
+                      prefixIcon: const Icon(Icons.search_rounded, color: Color(0xFF6366F1)),
+                      hintText: localization.translate('search_hint'),
+                      hintStyle: const TextStyle(fontSize: 15, color: Color(0xFF94A3B8)),
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.symmetric(vertical: 12),
                     ),
@@ -124,9 +109,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               const SizedBox(width: 12),
-              CircleAvatar(
-                backgroundColor: Colors.white.withOpacity(0.2),
-                child: const Icon(Icons.notifications_none_rounded, color: Colors.white),
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(context, NotificationsScreen.routeName),
+                child: CircleAvatar(
+                  backgroundColor: Colors.white.withOpacity(0.2),
+                  child: const Icon(Icons.notifications_none_rounded, color: Colors.white),
+                ),
               ),
             ],
           ),
@@ -136,22 +124,19 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const AddressBox(),
+             const AddressBox(),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Hello, ${user.name}',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Color(0xFF64748B),
-                    ),
+                    '${localization.translate('welcome')},',
+                    style: const TextStyle(fontSize: 14, color: Color(0xFF64748B)),
                   ),
-                  const Text(
-                    'Find Your Best Deal',
-                    style: TextStyle(
+                  Text(
+                    user.name,
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFF1E293B),
@@ -165,19 +150,92 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 10),
             const CarouselImage(),
             const SizedBox(height: 10),
+            if (recentlyViewedProducts.isNotEmpty)
+              ProductShowcase(
+                title: 'Continue Browsing',
+                products: recentlyViewedProducts,
+              ),
             const DealOfDay(),
             ProductShowcase(
-              title: 'Recommended for you',
+              title: localization.translate('featured_deals'),
               products: phoneDeals,
             ),
-            ProductShowcase(
-              title: 'Trending in Fashion',
-              products: fashionDeals,
-            ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 48),
+            _buildPersonalizedCard(),
+            const SizedBox(height: 40),
           ],
         ),
       ),
+      floatingActionButton: const _AISupportFAB(),
+    );
+  }
+
+  Widget _buildPersonalizedCard() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFF6366F1), Color(0xFF818CF8)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(32),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF6366F1).withOpacity(0.3),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Exclusive Offers\nFor You!',
+                  style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold, height: 1.2),
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  'Get up to 40% off on your favorite categories based on your history.',
+                  style: TextStyle(color: Colors.white70, fontSize: 13),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: const Color(0xFF6366F1),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                  child: const Text('Claim Offer', style: TextStyle(fontWeight: FontWeight.bold)),
+                ),
+              ],
+            ),
+          ),
+          const Icon(Icons.auto_awesome_rounded, color: Colors.white, size: 80),
+        ],
+      ),
+    );
+  }
+}
+
+class _AISupportFAB extends StatelessWidget {
+  const _AISupportFAB();
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton.extended(
+      onPressed: () => Navigator.pushNamed(context, '/ai-chat'),
+      backgroundColor: const Color(0xFF6366F1),
+      elevation: 10,
+      label: const Text('AI Support', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+      icon: const Icon(Icons.auto_awesome_rounded, color: Colors.white),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     );
   }
 }

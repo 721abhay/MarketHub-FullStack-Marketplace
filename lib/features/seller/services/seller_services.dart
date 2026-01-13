@@ -4,6 +4,7 @@ import 'package:amazon_clone/constants/error_handling.dart';
 import 'package:amazon_clone/constants/global_variables.dart';
 import 'package:amazon_clone/constants/utils.dart';
 import 'package:amazon_clone/models/product.dart';
+import 'package:amazon_clone/models/order.dart';
 import 'package:amazon_clone/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -94,5 +95,163 @@ class SellerServices {
       showSnackBar(context, e.toString());
     }
     return productList;
+  }
+
+  void updateOrderStatus({
+    required BuildContext context,
+    required int status,
+    required String orderId,
+    required VoidCallback onSuccess,
+  }) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    try {
+      http.Response res = await http.post(
+        Uri.parse('${GlobalVariables.uri}/seller/update-order-status'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+        body: jsonEncode({
+          'id': orderId,
+          'status': status,
+        }),
+      );
+
+      if (!context.mounted) return;
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: onSuccess,
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
+  Future<List<Order>> fetchSellerOrders({
+    required BuildContext context,
+    required String sellerId,
+  }) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    List<Order> orderList = [];
+    try {
+      http.Response res = await http.get(
+        Uri.parse('${GlobalVariables.uri}/seller/get-orders/$sellerId'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+      );
+
+      if (!context.mounted) return [];
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          for (int i = 0; i < jsonDecode(res.body).length; i++) {
+            orderList.add(
+              Order.fromJson(
+                jsonEncode(
+                  jsonDecode(res.body)[i],
+                ),
+              ),
+            );
+          }
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+    return orderList;
+  }
+
+  void requestPayout({
+    required BuildContext context,
+    required double amount,
+    required Map<String, String> bankDetails,
+    required VoidCallback onSuccess,
+  }) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    try {
+      http.Response res = await http.post(
+        Uri.parse('${GlobalVariables.uri}/seller/request-payout'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+        body: jsonEncode({
+          'amount': amount,
+          'bankDetails': bankDetails,
+        }),
+      );
+
+      if (!context.mounted) return;
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          userProvider.setUser(res.body);
+          onSuccess();
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
+  Future<List<dynamic>> fetchPayouts({
+    required BuildContext context,
+  }) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    List<dynamic> payouts = [];
+    try {
+      http.Response res = await http.get(
+        Uri.parse('${GlobalVariables.uri}/seller/payouts/${userProvider.user.id}'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+      );
+
+      if (!context.mounted) return [];
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          payouts = jsonDecode(res.body);
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+    return payouts;
+  }
+
+  Future<Map<String, dynamic>> getAnalytics(BuildContext context) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    Map<String, dynamic> analytics = {};
+    try {
+      http.Response res = await http.get(
+        Uri.parse('${GlobalVariables.uri}/seller/analytics/${userProvider.user.id}'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+      );
+
+      if (!context.mounted) return {};
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          analytics = jsonDecode(res.body);
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+    return analytics;
   }
 }
