@@ -1,0 +1,98 @@
+import 'package:amazon_clone/common/widgets/bottom_bar.dart';
+import 'package:amazon_clone/features/auth/screens/auth_screen.dart';
+import 'package:amazon_clone/features/address/screens/address_screen.dart';
+import 'package:amazon_clone/features/home/screens/category_deals_screen.dart';
+import 'package:amazon_clone/features/order_details/screens/order_details_screen.dart';
+import 'package:amazon_clone/features/account/screens/your_orders_screen.dart';
+import 'package:amazon_clone/features/account/screens/addresses_screen.dart';
+import 'package:amazon_clone/models/order.dart';
+import 'package:amazon_clone/features/home/screens/home_screen.dart';
+import 'package:amazon_clone/features/product_details/screens/product_details_screen.dart';
+import 'package:amazon_clone/features/search/screens/search_screen.dart';
+import 'package:amazon_clone/features/seller/screens/add_product_screen.dart';
+import 'package:amazon_clone/models/product.dart';
+import 'package:flutter/material.dart';
+
+Route<dynamic> generateRoute(RouteSettings routeSettings) {
+  switch (routeSettings.name) {
+    case AuthScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => const AuthScreen(),
+      );
+    case BottomBar.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => const BottomBar(),
+      );
+    case SearchScreen.routeName:
+      var searchQuery = routeSettings.arguments as String;
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => SearchScreen(
+          searchQuery: searchQuery,
+        ),
+      );
+    case ProductDetailScreen.routeName:
+      var product = routeSettings.arguments as Product;
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => ProductDetailScreen(
+          product: product,
+        ),
+      );
+    case CategoryDealsScreen.routeName:
+      var category = routeSettings.arguments as String;
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => CategoryDealsScreen(
+          category: category,
+        ),
+      );
+    case AddressScreen.routeName:
+      var totalAmount = routeSettings.arguments as String;
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => AddressScreen(
+          totalAmount: totalAmount,
+        ),
+      );
+    case OrderDetailScreen.routeName:
+      var order = routeSettings.arguments as Order;
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => OrderDetailScreen(
+          order: order,
+        ),
+      );
+    case YourOrdersScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => const YourOrdersScreen(),
+      );
+    case AddressesScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => const AddressesScreen(),
+      );
+    case HomeScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => const HomeScreen(),
+      );
+    case AddProductScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => const AddProductScreen(),
+      );
+    default:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => const Scaffold(
+          body: Center(
+            child: Text('Screen does not exist!'),
+          ),
+        ),
+      );
+  }
+}
