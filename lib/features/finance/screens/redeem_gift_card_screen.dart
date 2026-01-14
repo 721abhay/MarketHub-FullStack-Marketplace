@@ -1,5 +1,5 @@
-import 'package:amazon_clone/common/widgets/custom_button.dart';
-import 'package:amazon_clone/common/widgets/custom_textfield.dart';
+import 'package:markethub/common/widgets/custom_button.dart';
+import 'package:markethub/common/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 
 class GiftCardRedeemScreen extends StatefulWidget {

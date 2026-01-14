@@ -1,5 +1,5 @@
-import 'package:amazon_clone/common/widgets/custom_button.dart';
-import 'package:amazon_clone/features/real_estate/screens/schedule_tour_screen.dart';
+import 'package:markethub/common/widgets/custom_button.dart';
+import 'package:markethub/features/real_estate/screens/schedule_tour_screen.dart';
 import 'package:flutter/material.dart';
 
 class PropertyDetailScreen extends StatelessWidget {

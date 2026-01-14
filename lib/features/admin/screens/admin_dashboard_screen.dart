@@ -1,6 +1,6 @@
-import 'package:amazon_clone/common/widgets/loader.dart';
-import 'package:amazon_clone/constants/global_variables.dart';
-import 'package:amazon_clone/features/admin/services/admin_services.dart';
+import 'package:markethub/common/widgets/loader.dart';
+import 'package:markethub/constants/global_variables.dart';
+import 'package:markethub/features/admin/services/admin_services.dart';
 import 'package:flutter/material.dart';
 
 class AdminDashboardScreen extends StatefulWidget {

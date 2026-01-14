@@ -11,6 +11,7 @@ const productRouter = require('./routes/product');
 const userRouter = require('./routes/user');
 const aiRouter = require('./routes/ai');
 const promoRouter = require('./routes/promo');
+const serviceRouter = require('./routes/service');
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -44,6 +45,7 @@ app.use(productRouter);
 app.use(userRouter);
 app.use(aiRouter);
 app.use(promoRouter);
+app.use(serviceRouter);
 
 // Test route
 app.get('/', (req, res) => {

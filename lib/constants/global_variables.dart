@@ -3,38 +3,40 @@ import 'package:flutter/material.dart';
 class GlobalVariables {
   // Replace with your IP address
   static const String uri = 'http://192.168.0.103:3000';
-  // COLORS - MarketHub Premium Palette
+  
+  // COLORS - MarketHub Modern Premium Palette
   static const appBarGradient = LinearGradient(
     colors: [
-      Color(0xFF6366F1), // Indigo
-      Color(0xFF8B5CF6), // Violet
+      Color(0xFF6366F1), // Royal Indigo
+      Color(0xFFA855F7), // Purple
     ],
-    stops: [0.5, 1.0],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
   );
 
-  static const secondaryColor = Color(0xFF06B6D4); // Cyan
+  static const secondaryColor = Color(0xFF10B981); // Emerald
   static const accentColor = Color(0xFFF59E0B); // Amber for CTA
-  static const backgroundColor = Colors.white;
-  static const Color greyBackgroundCOlor = Color(0xfff8fafc); // Slate 50
+  static const backgroundColor = Color(0xFFF8FAFC);
+  static const Color greyBackgroundCOlor = Color(0xfff1f5f9); // Slate 100
   static const Color selectedNavBarColor = Color(0xFF6366F1);
-  static const unselectedNavBarColor = Color(0xFF64748B); // Slate 500
+  static const unselectedNavBarColor = Color(0xFF94A3B8); // Slate 400
 
-  // Phase 4: Glassmorphism Tokens
+  // Glassmorphism System
   static BoxDecoration glassmorphicDecoration = BoxDecoration(
-    color: Colors.white.withValues(alpha: 0.4),
+    color: Colors.white.withValues(alpha: 0.7),
     borderRadius: BorderRadius.circular(24),
-    border: Border.all(color: Colors.white.withValues(alpha: 0.4), width: 1.5),
+    border: Border.all(color: Colors.white, width: 1.5),
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withValues(alpha: 0.05),
-        blurRadius: 20,
+        color: const Color(0xFF6366F1).withValues(alpha: 0.1),
+        blurRadius: 30,
         offset: const Offset(0, 10),
       ),
     ],
   );
 
-  static Color glassColor = Colors.white.withValues(alpha: 0.2);
-  static double glassBlur = 10.0;
+  static Color glassColor = Colors.white.withValues(alpha: 0.15);
+  static double glassBlur = 15.0;
 
   // STATIC IMAGES
   static const List<Map<String, String>> categoryImages = [

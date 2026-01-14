@@ -1,4 +1,4 @@
-import 'package:amazon_clone/models/product.dart';
+import 'package:markethub/models/product.dart';
 import 'package:flutter/material.dart';
 
 class AugmentedRealityScreen extends StatelessWidget {

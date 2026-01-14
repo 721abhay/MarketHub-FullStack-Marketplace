@@ -1,7 +1,7 @@
-import 'package:amazon_clone/constants/global_variables.dart';
-import 'package:amazon_clone/features/social/screens/community_profile_screen.dart'; // Added
-import 'package:amazon_clone/features/social/screens/create_post_screen.dart';
-import 'package:amazon_clone/features/social/screens/post_detail_screen.dart';
+import 'package:markethub/constants/global_variables.dart';
+import 'package:markethub/features/social/screens/community_profile_screen.dart'; // Added
+import 'package:markethub/features/social/screens/create_post_screen.dart';
+import 'package:markethub/features/social/screens/post_detail_screen.dart';
 import 'package:flutter/material.dart';
 
 class CommunityFeedScreen extends StatelessWidget {

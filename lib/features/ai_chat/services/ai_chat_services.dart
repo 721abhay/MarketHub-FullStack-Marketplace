@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:amazon_clone/constants/error_handling.dart';
-import 'package:amazon_clone/constants/global_variables.dart';
-import 'package:amazon_clone/providers/user_provider.dart';
+import 'package:markethub/constants/error_handling.dart';
+import 'package:markethub/constants/global_variables.dart';
+import 'package:markethub/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';

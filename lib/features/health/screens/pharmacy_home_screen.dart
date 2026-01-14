@@ -1,5 +1,5 @@
-import 'package:amazon_clone/features/health/screens/doctor_consultation_screen.dart';
-import 'package:amazon_clone/features/health/screens/prescription_upload_screen.dart';
+import 'package:markethub/features/health/screens/doctor_consultation_screen.dart';
+import 'package:markethub/features/health/screens/prescription_upload_screen.dart';
 import 'package:flutter/material.dart';
 
 class PharmacyHomeScreen extends StatelessWidget {

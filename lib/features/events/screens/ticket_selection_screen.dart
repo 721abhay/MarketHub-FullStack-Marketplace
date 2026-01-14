@@ -1,5 +1,5 @@
-import 'package:amazon_clone/common/widgets/custom_button.dart';
-import 'package:amazon_clone/features/events/screens/booking_confirmation_screen.dart';
+import 'package:markethub/common/widgets/custom_button.dart';
+import 'package:markethub/features/events/screens/booking_confirmation_screen.dart';
 import 'package:flutter/material.dart';
 
 class TicketSelectionScreen extends StatefulWidget {

@@ -1,4 +1,4 @@
-import 'package:amazon_clone/theme/app_colors.dart';
+import 'package:markethub/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -13,9 +13,11 @@ class AppTheme {
       surface: AppColors.cardLight,
     ),
     textTheme: GoogleFonts.outfitTextTheme().copyWith(
-      displayLarge: GoogleFonts.outfit(fontWeight: FontWeight.bold, color: AppColors.textMain),
-      titleLarge: GoogleFonts.outfit(fontWeight: FontWeight.w600, color: AppColors.textMain),
-      bodyMedium: GoogleFonts.outfit(color: AppColors.textMain),
+      displayLarge: GoogleFonts.outfit(fontWeight: FontWeight.bold, color: AppColors.textMain, fontSize: 32),
+      titleLarge: GoogleFonts.outfit(fontWeight: FontWeight.bold, color: AppColors.textMain, fontSize: 20, letterSpacing: -0.5),
+      bodyMedium: GoogleFonts.inter(color: AppColors.textMain, fontSize: 14),
+      bodyLarge: GoogleFonts.inter(color: AppColors.textMain, fontSize: 16),
+      labelLarge: GoogleFonts.inter(fontWeight: FontWeight.w600, color: AppColors.textMain),
     ),
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.transparent,
@@ -23,18 +25,33 @@ class AppTheme {
       centerTitle: false,
       iconTheme: IconThemeData(color: AppColors.textMain),
     ),
-    cardTheme: const CardThemeData(
+    cardTheme: CardThemeData(
       elevation: 0,
       color: AppColors.cardLight,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
+        side: const BorderSide(color: Color(0xFFE2E8F0), width: 1),
+      ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         elevation: 0,
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 24),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        textStyle: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 16),
       ),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: const Color(0xFFF1F5F9),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide.none,
+      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      hintStyle: GoogleFonts.inter(color: AppColors.textSub, fontSize: 14),
     ),
   );
 
@@ -48,18 +65,22 @@ class AppTheme {
       surface: AppColors.cardDark,
     ),
     textTheme: GoogleFonts.outfitTextTheme(ThemeData.dark().textTheme).copyWith(
-      displayLarge: GoogleFonts.outfit(fontWeight: FontWeight.bold, color: AppColors.textMainDark),
-      titleLarge: GoogleFonts.outfit(fontWeight: FontWeight.w600, color: AppColors.textMainDark),
-      bodyMedium: GoogleFonts.outfit(color: AppColors.textMainDark),
+      displayLarge: GoogleFonts.outfit(fontWeight: FontWeight.bold, color: AppColors.textMainDark, fontSize: 32),
+      titleLarge: GoogleFonts.outfit(fontWeight: FontWeight.bold, color: AppColors.textMainDark, fontSize: 20, letterSpacing: -0.5),
+      bodyMedium: GoogleFonts.inter(color: AppColors.textSubDark, fontSize: 14),
     ),
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.transparent,
       elevation: 0,
       iconTheme: IconThemeData(color: AppColors.textMainDark),
     ),
-    cardTheme: const CardThemeData(
+    cardTheme: CardThemeData(
       elevation: 0,
       color: AppColors.cardDark,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
+        side: BorderSide(color: Colors.white.withValues(alpha: 0.1), width: 1),
+      ),
     ),
   );
 }

@@ -1,9 +1,9 @@
-import 'package:amazon_clone/features/account/screens/coupons_screen.dart';
-import 'package:amazon_clone/features/grocery/screens/grocery_category_screen.dart';
-import 'package:amazon_clone/features/grocery/screens/milk_subscription_screen.dart';
-import 'package:amazon_clone/features/grocery/screens/slot_booking_screen.dart';
-import 'package:amazon_clone/features/grocery/screens/order_tracking_screen.dart';
-import 'package:amazon_clone/features/shopping_list/screens/shopping_list_screen.dart';
+import 'package:markethub/features/account/screens/coupons_screen.dart';
+import 'package:markethub/features/grocery/screens/grocery_category_screen.dart';
+import 'package:markethub/features/grocery/screens/milk_subscription_screen.dart';
+import 'package:markethub/features/grocery/screens/slot_booking_screen.dart';
+import 'package:markethub/features/grocery/screens/order_tracking_screen.dart';
+import 'package:markethub/features/shopping_list/screens/shopping_list_screen.dart';
 import 'package:flutter/material.dart';
 
 class GroceryHomeScreen extends StatelessWidget {

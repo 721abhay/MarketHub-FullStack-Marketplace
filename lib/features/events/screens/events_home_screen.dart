@@ -1,4 +1,4 @@
-import 'package:amazon_clone/features/events/screens/event_detail_screen.dart';
+import 'package:markethub/features/events/screens/event_detail_screen.dart';
 import 'package:flutter/material.dart';
 
 class EventsHomeScreen extends StatelessWidget {

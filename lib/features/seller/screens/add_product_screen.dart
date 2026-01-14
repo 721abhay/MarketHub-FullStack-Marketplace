@@ -1,9 +1,9 @@
 import 'dart:io';
-import 'package:amazon_clone/common/widgets/custom_button.dart';
-import 'package:amazon_clone/common/widgets/custom_textfield.dart';
-import 'package:amazon_clone/constants/global_variables.dart';
-import 'package:amazon_clone/constants/utils.dart';
-import 'package:amazon_clone/features/seller/services/seller_services.dart';
+import 'package:markethub/common/widgets/custom_button.dart';
+import 'package:markethub/common/widgets/custom_textfield.dart';
+import 'package:markethub/constants/global_variables.dart';
+import 'package:markethub/constants/utils.dart';
+import 'package:markethub/features/seller/services/seller_services.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 

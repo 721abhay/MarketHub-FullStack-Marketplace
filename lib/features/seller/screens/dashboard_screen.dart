@@ -1,15 +1,15 @@
 import 'dart:ui';
-import 'package:amazon_clone/models/user.dart';
-import 'package:amazon_clone/common/widgets/glass_container.dart';
-import 'package:amazon_clone/common/widgets/loader.dart';
-import 'package:amazon_clone/features/seller/screens/seller_payout_screen.dart';
-import 'package:amazon_clone/features/seller/services/seller_services.dart';
-import 'package:amazon_clone/features/seller/screens/seller_orders_screen.dart'; // Added
-import 'package:amazon_clone/features/seller/screens/coupons_manager_screen.dart'; // Added
-import 'package:amazon_clone/features/seller/screens/seller_analytics_screen.dart'; 
-import 'package:amazon_clone/features/seller/screens/inventory_report_screen.dart'; 
-import 'package:amazon_clone/features/seller/screens/campaign_manager_screen.dart'; 
-import 'package:amazon_clone/providers/user_provider.dart';
+import 'package:markethub/models/user.dart';
+import 'package:markethub/common/widgets/glass_container.dart';
+import 'package:markethub/common/widgets/loader.dart';
+import 'package:markethub/features/seller/screens/seller_payout_screen.dart';
+import 'package:markethub/features/seller/services/seller_services.dart';
+import 'package:markethub/features/seller/screens/seller_orders_screen.dart'; // Added
+import 'package:markethub/features/seller/screens/coupons_manager_screen.dart'; // Added
+import 'package:markethub/features/seller/screens/seller_analytics_screen.dart'; 
+import 'package:markethub/features/seller/screens/inventory_report_screen.dart'; 
+import 'package:markethub/features/seller/screens/campaign_manager_screen.dart'; 
+import 'package:markethub/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

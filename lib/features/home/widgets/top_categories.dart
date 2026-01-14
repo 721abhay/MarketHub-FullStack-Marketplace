@@ -1,15 +1,14 @@
-import 'package:amazon_clone/constants/global_variables.dart';
-import 'package:amazon_clone/features/account/screens/coupons_screen.dart';
-import 'package:amazon_clone/features/appliances/screens/appliance_home_screen.dart';
-import 'package:amazon_clone/features/books/screens/book_home_screen.dart';
-import 'package:amazon_clone/features/fashion/screens/fashion_home_screen.dart';
-import 'package:amazon_clone/features/gamification/screens/daily_check_in_screen.dart';
-import 'package:amazon_clone/features/grocery/screens/grocery_home_screen.dart';
-import 'package:amazon_clone/features/grocery/screens/milk_subscription_screen.dart';
-import 'package:amazon_clone/features/home/screens/category_deals_screen.dart';
-import 'package:amazon_clone/features/home/screens/deals_screen.dart';
-import 'package:amazon_clone/features/hub/screens/main_hub_dashboard.dart';
-import 'package:amazon_clone/features/mobiles/screens/mobile_home_screen.dart';
+import 'package:markethub/constants/global_variables.dart';
+import 'package:markethub/features/account/screens/coupons_screen.dart';
+import 'package:markethub/features/appliances/screens/appliance_home_screen.dart';
+import 'package:markethub/features/books/screens/book_home_screen.dart';
+import 'package:markethub/features/fashion/screens/fashion_home_screen.dart';
+import 'package:markethub/features/grocery/screens/grocery_home_screen.dart';
+import 'package:markethub/features/grocery/screens/milk_subscription_screen.dart';
+import 'package:markethub/features/home/screens/category_deals_screen.dart';
+import 'package:markethub/features/home/screens/deals_screen.dart';
+import 'package:markethub/features/hub/screens/main_hub_dashboard.dart';
+import 'package:markethub/features/mobiles/screens/mobile_home_screen.dart';
 import 'package:flutter/material.dart';
 
 class TopCategories extends StatelessWidget {
@@ -52,8 +51,8 @@ class TopCategories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 110,
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      height: 120,
+      padding: const EdgeInsets.symmetric(vertical: 12),
       child: ListView.builder(
         itemCount: GlobalVariables.categoryImages.length,
         scrollDirection: Axis.horizontal,
@@ -63,42 +62,66 @@ class TopCategories extends StatelessWidget {
           return GestureDetector(
             onTap: () => navigateToCategoryPage(context, category['title']!),
             child: Container(
-              width: 80,
-              margin: const EdgeInsets.only(right: 12),
+              width: 84,
+              margin: const EdgeInsets.only(right: 14),
               child: Column(
                 children: [
                   Container(
-                    height: 64,
-                    width: 64,
-                    padding: const EdgeInsets.all(12),
+                    height: 72,
+                    width: 72,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: const Color(0xFFF1F5F9)),
+                      borderRadius: BorderRadius.circular(22),
+                      border: Border.all(color: const Color(0xFFF1F5F9), width: 1.5),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.03),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
+                          color: const Color(0xFF6366F1).withValues(alpha: 0.08),
+                          blurRadius: 15,
+                          offset: const Offset(0, 8),
                         ),
                       ],
                     ),
-                    child: Image.network(
-                      category['image']!,
-                      fit: BoxFit.contain,
-                      errorBuilder: (context, error, stackTrace) => const Icon(
-                        Icons.category_outlined,
-                        color: Color(0xFF6366F1),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(21),
+                      child: Stack(
+                        children: [
+                          Positioned.fill(
+                            child: Image.network(
+                              category['image']!,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) => Container(
+                                color: const Color(0xFFF1F5F9),
+                                child: const Icon(
+                                  Icons.category_outlined,
+                                  color: Color(0xFF6366F1),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  Colors.black.withValues(alpha: 0.2),
+                                  Colors.transparent,
+                                ],
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.center,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 10),
                   Text(
                     category['title']!,
                     style: const TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF64748B),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF334155),
+                      letterSpacing: -0.2,
                     ),
                     textAlign: TextAlign.center,
                     maxLines: 1,

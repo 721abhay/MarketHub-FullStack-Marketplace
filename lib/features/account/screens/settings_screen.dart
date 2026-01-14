@@ -1,5 +1,5 @@
-import 'package:amazon_clone/features/account/screens/notifications_screen.dart';
-import 'package:amazon_clone/features/account/screens/theme_selector_screen.dart';
+import 'package:markethub/features/account/screens/notifications_screen.dart';
+import 'package:markethub/features/account/screens/theme_selector_screen.dart';
 import 'package:flutter/material.dart';
 
 class GeneralSettingsScreen extends StatelessWidget {

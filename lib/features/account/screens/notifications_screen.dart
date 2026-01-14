@@ -1,7 +1,7 @@
-import 'package:amazon_clone/common/widgets/loader.dart';
-import 'package:amazon_clone/constants/global_variables.dart';
-import 'package:amazon_clone/features/account/services/account_services.dart';
-import 'package:amazon_clone/models/notification.dart' as model;
+import 'package:markethub/common/widgets/loader.dart';
+import 'package:markethub/constants/global_variables.dart';
+import 'package:markethub/features/account/services/account_services.dart';
+import 'package:markethub/models/notification.dart' as model;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

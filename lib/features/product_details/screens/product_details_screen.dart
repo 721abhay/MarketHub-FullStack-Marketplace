@@ -1,17 +1,18 @@
-import 'package:amazon_clone/common/widgets/custom_button.dart';
-import 'package:amazon_clone/common/widgets/loader.dart';
-import 'package:amazon_clone/constants/global_variables.dart';
-import 'package:amazon_clone/features/address/screens/address_screen.dart';
-import 'package:amazon_clone/features/hub/screens/main_hub_dashboard.dart';
-import 'package:amazon_clone/features/product_details/services/product_details_services.dart';
-import 'package:amazon_clone/features/product_details/screens/add_review_screen.dart'; // Added
-import 'package:amazon_clone/features/product_details/screens/product_reviews_screen.dart'; // Added
-import 'package:amazon_clone/features/product_details/screens/price_alert_screen.dart'; // Added
-import 'package:amazon_clone/features/product_details/screens/compare_products_screen.dart'; // Added
-import 'package:amazon_clone/features/product_details/screens/augmented_reality_screen.dart'; // Added
-import 'package:amazon_clone/features/seller/screens/seller_storefront_screen.dart';
-import 'package:amazon_clone/models/product.dart';
-import 'package:amazon_clone/providers/user_provider.dart';
+import 'package:markethub/common/widgets/custom_button.dart';
+import 'package:markethub/common/widgets/loader.dart';
+import 'package:markethub/constants/global_variables.dart';
+import 'package:markethub/features/address/screens/address_screen.dart';
+import 'package:markethub/features/hub/screens/main_hub_dashboard.dart';
+import 'package:markethub/features/product_details/services/product_details_services.dart';
+import 'package:markethub/features/product_details/screens/add_review_screen.dart'; // Added
+import 'package:markethub/features/product_details/screens/price_alert_screen.dart'; // Added
+import 'package:markethub/features/product_details/screens/compare_products_screen.dart'; // Added
+import 'package:markethub/features/product_details/screens/augmented_reality_screen.dart'; // Added
+import 'package:markethub/features/seller/screens/seller_storefront_screen.dart';
+import 'package:markethub/common/widgets/shimmer_loader.dart';
+import 'package:markethub/models/product.dart';
+import 'package:markethub/providers/user_provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';

@@ -1,6 +1,6 @@
-import 'package:amazon_clone/features/jobs/screens/apply_job_screen.dart';
-import 'package:amazon_clone/features/jobs/screens/job_detail_screen.dart';
-import 'package:amazon_clone/features/jobs/screens/jobs_home_screen.dart';
+import 'package:markethub/features/jobs/screens/apply_job_screen.dart';
+import 'package:markethub/features/jobs/screens/job_detail_screen.dart';
+import 'package:markethub/features/jobs/screens/jobs_home_screen.dart';
 import 'package:flutter/material.dart';
 
 class JobsRouter {

@@ -1,10 +1,34 @@
-import 'package:amazon_clone/common/widgets/custom_button.dart';
-import 'package:amazon_clone/features/health/screens/consultation_chat_screen.dart';
+import 'package:markethub/common/widgets/custom_button.dart';
+import 'package:markethub/common/widgets/shimmer_loader.dart';
+import 'package:markethub/features/health/screens/consultation_chat_screen.dart';
+import 'package:markethub/features/hub/services/hub_services.dart';
+import 'package:markethub/models/service_models.dart';
 import 'package:flutter/material.dart';
 
-class DoctorConsultationScreen extends StatelessWidget {
+class DoctorConsultationScreen extends StatefulWidget {
   static const String routeName = '/doctor-consultation';
   const DoctorConsultationScreen({super.key});
+
+  @override
+  State<DoctorConsultationScreen> createState() => _DoctorConsultationScreenState();
+}
+
+class _DoctorConsultationScreenState extends State<DoctorConsultationScreen> {
+  final HubServices hubServices = HubServices();
+  List<HealthProvider>? doctors;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadDoctors();
+  }
+
+  void _loadDoctors() async {
+    final list = await hubServices.fetchHealthConsultations(context: context);
+    setState(() {
+      doctors = list;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,17 +50,20 @@ class DoctorConsultationScreen extends StatelessWidget {
                 children: [
                   Container(
                     padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(color: const Color(0xFFEEF2FF), borderRadius: BorderRadius.circular(24)),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF0FDF4), // Success Light
+                      borderRadius: BorderRadius.circular(24),
+                    ),
                     child: Row(
                       children: [
-                        const Icon(Icons.video_call_rounded, color: Color(0xFF6366F1), size: 48),
+                        const Icon(Icons.video_call_rounded, color: Color(0xFF10B981), size: 48),
                         const SizedBox(width: 20),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text('Video Consultation', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                              Text('Talk to a specialist within 10 mins', style: TextStyle(color: Colors.grey[600], fontSize: 13)),
+                              const Text('Instant Video Consult', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                              Text('Connect with a GP within 5 minutes', style: TextStyle(color: Colors.grey[600], fontSize: 13)),
                             ],
                           ),
                         ),
@@ -46,53 +73,87 @@ class DoctorConsultationScreen extends StatelessWidget {
                   const SizedBox(height: 32),
                   const Text('Available Specialists', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 16),
-                  _buildDoctorCard('Dr. Sarah Johnson', 'General Physician', '4.9 (1.2k)', 'https://images.unsplash.com/photo-1559839734-2b71f1536780?auto=format&fit=crop&q=80&w=200'),
-                  _buildDoctorCard('Dr. Michael Chen', 'Cardiologist', '5.0 (800)', 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=200'),
-                  _buildDoctorCard('Dr. Emily Davis', 'Dermatologist', '4.8 (950)', 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&q=80&w=200'),
+                  if (doctors == null)
+                    const Column(
+                      children: [
+                        ShimmerLoader(width: double.infinity, height: 100),
+                        SizedBox(height: 16),
+                        ShimmerLoader(width: double.infinity, height: 100),
+                      ],
+                    )
+                  else
+                    ...doctors!.map((doc) => _buildDoctorCard(doc)),
                 ],
               ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(24),
-            child: CustomButton(text: 'Start Fast Consult', onTap: () {}),
+            child: CustomButton(
+                text: 'Fast Track Consult (\$20)',
+                onTap: () {
+                  // Book fast track
+                }),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildDoctorCard(String name, String spec, String rating, String img) {
+  Widget _buildDoctorCard(HealthProvider doctor) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
+        border: Border.all(color: const Color(0xFFF1F5F9)),
       ),
       child: Row(
         children: [
-          CircleAvatar(radius: 30, backgroundImage: NetworkImage(img)),
+          Stack(
+            children: [
+              CircleAvatar(radius: 30, backgroundImage: NetworkImage(doctor.imageUrl)),
+              Positioned(
+                right: 0,
+                bottom: 0,
+                child: Container(
+                  width: 14,
+                  height: 14,
+                  decoration: BoxDecoration(color: const Color(0xFF10B981), shape: BoxShape.circle, border: Border.all(color: Colors.white, width: 2)),
+                ),
+              ),
+            ],
+          ),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                Text(spec, style: const TextStyle(color: Colors.grey, fontSize: 13)),
+                Text(doctor.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                Text('${doctor.specialty} • ${doctor.experience}', style: const TextStyle(color: Colors.grey, fontSize: 13)),
                 const SizedBox(height: 4),
                 Row(
                   children: [
-                    const Icon(Icons.star, color: Colors.amber, size: 14),
-                    Text(' $rating', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                    const Icon(Icons.star_rounded, color: Colors.amber, size: 16),
+                    Text(' ${doctor.rating}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                    const SizedBox(width: 8),
+                    Text('Fee: \$${doctor.fee}', style: const TextStyle(color: Color(0xFF6366F1), fontWeight: FontWeight.bold, fontSize: 12)),
                   ],
                 ),
               ],
             ),
           ),
-          Builder(
-            builder: (context) => TextButton(onPressed: () => Navigator.pushNamed(context, ConsultationChatScreen.routeName, arguments: name), child: const Text('Book')),
+          ElevatedButton(
+            onPressed: () => Navigator.pushNamed(context, ConsultationChatScreen.routeName, arguments: doctor.name),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF6366F1),
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              elevation: 0,
+            ),
+            child: const Text('Book', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
           ),
         ],
       ),

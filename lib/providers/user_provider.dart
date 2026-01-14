@@ -1,5 +1,5 @@
-import 'package:amazon_clone/models/product.dart';
-import 'package:amazon_clone/models/user.dart';
+import 'package:markethub/models/product.dart';
+import 'package:markethub/models/user.dart';
 import 'package:flutter/material.dart';
 
 class UserProvider extends ChangeNotifier {

@@ -1,6 +1,6 @@
-import 'package:amazon_clone/features/real_estate/screens/property_detail_screen.dart';
-import 'package:amazon_clone/features/real_estate/screens/property_home_screen.dart';
-import 'package:amazon_clone/features/real_estate/screens/schedule_tour_screen.dart';
+import 'package:markethub/features/real_estate/screens/property_detail_screen.dart';
+import 'package:markethub/features/real_estate/screens/property_home_screen.dart';
+import 'package:markethub/features/real_estate/screens/schedule_tour_screen.dart';
 import 'package:flutter/material.dart';
 
 class RealEstateRouter {

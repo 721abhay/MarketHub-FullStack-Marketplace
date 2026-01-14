@@ -1,4 +1,4 @@
-import 'package:amazon_clone/features/entertainment/screens/video_player_screen.dart';
+import 'package:markethub/features/entertainment/screens/video_player_screen.dart';
 import 'package:flutter/material.dart';
 
 class PrimeVideoHomeScreen extends StatelessWidget {

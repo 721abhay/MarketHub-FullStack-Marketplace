@@ -1,7 +1,7 @@
-import 'package:amazon_clone/constants/global_variables.dart';
-import 'package:amazon_clone/constants/utils.dart';
-import 'package:amazon_clone/features/seller/services/seller_services.dart';
-import 'package:amazon_clone/providers/user_provider.dart';
+import 'package:markethub/constants/global_variables.dart';
+import 'package:markethub/constants/utils.dart';
+import 'package:markethub/features/seller/services/seller_services.dart';
+import 'package:markethub/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';

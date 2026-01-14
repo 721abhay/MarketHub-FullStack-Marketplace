@@ -1,5 +1,5 @@
-import 'package:amazon_clone/constants/global_variables.dart';
-import 'package:amazon_clone/features/content/screens/blog_post_screen.dart';
+import 'package:markethub/constants/global_variables.dart';
+import 'package:markethub/features/content/screens/blog_post_screen.dart';
 import 'package:flutter/material.dart';
 
 class BlogScreen extends StatelessWidget {

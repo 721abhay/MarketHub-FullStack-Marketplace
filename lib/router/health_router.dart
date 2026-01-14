@@ -1,8 +1,8 @@
-import 'package:amazon_clone/features/health/screens/consultation_chat_screen.dart';
-import 'package:amazon_clone/features/health/screens/doctor_consultation_screen.dart';
-import 'package:amazon_clone/features/health/screens/medication_reminder_screen.dart';
-import 'package:amazon_clone/features/health/screens/pharmacy_home_screen.dart';
-import 'package:amazon_clone/features/health/screens/prescription_upload_screen.dart';
+import 'package:markethub/features/health/screens/consultation_chat_screen.dart';
+import 'package:markethub/features/health/screens/doctor_consultation_screen.dart';
+import 'package:markethub/features/health/screens/medication_reminder_screen.dart';
+import 'package:markethub/features/health/screens/pharmacy_home_screen.dart';
+import 'package:markethub/features/health/screens/prescription_upload_screen.dart';
 import 'package:flutter/material.dart';
 
 class HealthRouter {

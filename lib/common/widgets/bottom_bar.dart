@@ -1,15 +1,15 @@
-import 'package:amazon_clone/constants/global_variables.dart';
-import 'package:amazon_clone/features/account/screens/account_screen.dart';
-import 'package:amazon_clone/features/cart/screens/cart_screen.dart';
-import 'package:amazon_clone/features/home/screens/home_screen.dart';
-import 'package:amazon_clone/features/hub/screens/main_hub_dashboard.dart';
-import 'package:amazon_clone/features/seller/screens/dashboard_screen.dart';
-import 'package:amazon_clone/features/seller/screens/products_screen.dart';
-import 'package:amazon_clone/features/seller/screens/seller_orders_screen.dart';
-import 'package:amazon_clone/features/admin/screens/admin_dashboard_screen.dart';
-import 'package:amazon_clone/features/admin/screens/admin_sellers_screen.dart';
-import 'package:amazon_clone/features/admin/screens/admin_products_screen.dart';
-import 'package:amazon_clone/providers/user_provider.dart';
+import 'package:markethub/constants/global_variables.dart';
+import 'package:markethub/features/account/screens/account_screen.dart';
+import 'package:markethub/features/cart/screens/cart_screen.dart';
+import 'package:markethub/features/home/screens/home_screen.dart';
+import 'package:markethub/features/hub/screens/main_hub_dashboard.dart';
+import 'package:markethub/features/seller/screens/dashboard_screen.dart';
+import 'package:markethub/features/seller/screens/products_screen.dart';
+import 'package:markethub/features/seller/screens/seller_orders_screen.dart';
+import 'package:markethub/features/admin/screens/admin_dashboard_screen.dart';
+import 'package:markethub/features/admin/screens/admin_sellers_screen.dart';
+import 'package:markethub/features/admin/screens/admin_products_screen.dart';
+import 'package:markethub/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,8 +23,6 @@ class BottomBar extends StatefulWidget {
 
 class _BottomBarState extends State<BottomBar> {
   int _page = 0;
-  double bottomBarWidth = 42;
-  double bottomBarBorderWidth = 5;
 
   List<Widget> buyerPages = [
     const HomeScreen(),
@@ -65,89 +63,92 @@ class _BottomBarState extends State<BottomBar> {
       pages = buyerPages;
     }
 
-    // BUYER ITEMS
-    List<BottomNavigationBarItem> buyerItems = [
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.home_max_rounded),
-        label: 'Home',
+    return Scaffold(
+      extendBody: true, // Key for floating effect
+      body: pages[_page],
+      bottomNavigationBar: Container(
+        margin: const EdgeInsets.fromLTRB(20, 0, 20, 30),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(30),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF6366F1).withValues(alpha: 0.15),
+              blurRadius: 30,
+              offset: const Offset(0, 10),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(30),
+          child: BottomNavigationBar(
+            currentIndex: _page,
+            selectedItemColor: GlobalVariables.selectedNavBarColor,
+            unselectedItemColor: GlobalVariables.unselectedNavBarColor,
+            backgroundColor: Colors.white,
+            type: BottomNavigationBarType.fixed,
+            selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11),
+            unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 11),
+            iconSize: 22,
+            elevation: 0,
+            onTap: updatePage,
+            items: user.type == 'admin' 
+                ? _buildAdminItems() 
+                : (user.type == 'seller' ? _buildSellerItems() : _buildBuyerItems(userCartLen)),
+          ),
+        ),
       ),
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.hub_rounded),
-        label: 'Hub',
-      ),
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.person_pin_rounded),
-        label: 'Account',
-      ),
+    );
+  }
+
+  List<BottomNavigationBarItem> _buildBuyerItems(int cartLen) {
+    return [
+      _navItem(Icons.home_filled, Icons.home_outlined, 'Home'),
+      _navItem(Icons.hub_rounded, Icons.hub_outlined, 'Hub'),
+      _navItem(Icons.person_rounded, Icons.person_outline_rounded, 'Account'),
       BottomNavigationBarItem(
         icon: Badge(
-          label: Text(userCartLen.toString()),
-          backgroundColor: GlobalVariables.secondaryColor,
-          child: const Icon(Icons.shopping_bag_rounded),
+          label: Text(cartLen.toString()),
+          backgroundColor: const Color(0xFF6366F1),
+          child: const Icon(Icons.shopping_basket_outlined),
+        ),
+        activeIcon: Badge(
+           label: Text(cartLen.toString()),
+           backgroundColor: const Color(0xFF6366F1),
+           child: const Icon(Icons.shopping_basket_rounded),
         ),
         label: 'Cart',
       ),
     ];
+  }
 
-    // SELLER ITEMS
-    List<BottomNavigationBarItem> sellerItems = [
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.dashboard_rounded),
-        label: 'Dashboard',
-      ),
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.inventory_2_rounded),
-        label: 'Products',
-      ),
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.assignment_rounded),
-        label: 'Orders',
-      ),
+  List<BottomNavigationBarItem> _buildSellerItems() {
+    return [
+      _navItem(Icons.dashboard_rounded, Icons.dashboard_outlined, 'Dashboard'),
+      _navItem(Icons.inventory_2_rounded, Icons.inventory_2_outlined, 'Products'),
+      _navItem(Icons.assignment_rounded, Icons.assignment_outlined, 'Orders'),
     ];
+  }
 
-    // ADMIN ITEMS
-    List<BottomNavigationBarItem> adminItems = [
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.analytics_rounded),
-        label: 'Insights',
-      ),
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.admin_panel_settings_rounded),
-        label: 'Sellers',
-      ),
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.gavel_rounded),
-        label: 'Moderate',
-      ),
+  List<BottomNavigationBarItem> _buildAdminItems() {
+    return [
+      _navItem(Icons.analytics_rounded, Icons.analytics_outlined, 'Insights'),
+      _navItem(Icons.admin_panel_settings_rounded, Icons.admin_panel_settings_outlined, 'Sellers'),
+      _navItem(Icons.gavel_rounded, Icons.gavel_outlined, 'Moderate'),
     ];
+  }
 
-    return Scaffold(
-      body: pages[_page],
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, -4),
-            ),
-          ],
-        ),
-        child: BottomNavigationBar(
-          currentIndex: _page,
-          selectedItemColor: GlobalVariables.selectedNavBarColor,
-          unselectedItemColor: GlobalVariables.unselectedNavBarColor,
-          backgroundColor: GlobalVariables.backgroundColor,
-          type: BottomNavigationBarType.fixed,
-          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-          unselectedLabelStyle: const TextStyle(fontSize: 12),
-          iconSize: 24,
-          onTap: updatePage,
-          items: user.type == 'admin' 
-              ? adminItems 
-              : (user.type == 'seller' ? sellerItems : buyerItems),
-        ),
+  BottomNavigationBarItem _navItem(IconData active, IconData inactive, String label) {
+    return BottomNavigationBarItem(
+      icon: Padding(
+        padding: const EdgeInsets.only(bottom: 4),
+        child: Icon(inactive),
       ),
+      activeIcon: Padding(
+        padding: const EdgeInsets.only(bottom: 4),
+        child: Icon(active),
+      ),
+      label: label,
     );
   }
 }

@@ -1,4 +1,4 @@
-import 'package:amazon_clone/constants/global_variables.dart';
+import 'package:markethub/constants/global_variables.dart';
 import 'package:flutter/material.dart';
 
 class AboutUsScreen extends StatelessWidget {

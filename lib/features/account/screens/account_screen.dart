@@ -1,30 +1,31 @@
-import 'package:amazon_clone/constants/global_variables.dart';
-import 'package:amazon_clone/features/account/screens/your_orders_screen.dart';
-import 'package:amazon_clone/features/account/screens/addresses_screen.dart';
-import 'package:amazon_clone/features/account/screens/notifications_screen.dart';
-import 'package:amazon_clone/features/account/screens/wallet_screen.dart';
-import 'package:amazon_clone/features/account/screens/edit_profile_screen.dart'; // Added
-import 'package:amazon_clone/features/account/screens/help_center_screen.dart'; // Added
-import 'package:amazon_clone/features/account/screens/loyalty_points_screen.dart'; // Added
-import 'package:amazon_clone/features/account/screens/referral_screen.dart'; // Added
-import 'package:amazon_clone/features/account/screens/safety_center_screen.dart'; // Added
-import 'package:amazon_clone/features/account/screens/coupons_screen.dart'; // Added
-import 'package:amazon_clone/features/content/screens/legal/privacy_policy_screen.dart'; // Added
-import 'package:amazon_clone/features/content/screens/legal/terms_conditions_screen.dart'; // Added
-import 'package:amazon_clone/features/content/screens/about_us_screen.dart'; // Added
-import 'package:amazon_clone/features/content/screens/blog_screen.dart'; // Added
-import 'package:amazon_clone/features/corporate/screens/sustainability_report_screen.dart';
-import 'package:amazon_clone/features/account/screens/feedback_screen.dart'; // Added
-import 'package:amazon_clone/features/account/screens/settings_screen.dart';
-import 'package:amazon_clone/features/hub/screens/plus_subscription_screen.dart';
-import 'package:amazon_clone/features/auth/screens/auth_screen.dart';
-import 'package:amazon_clone/providers/user_provider.dart';
-import 'package:amazon_clone/providers/localization_provider.dart';
-import 'package:amazon_clone/localization/language_constants.dart';
+import 'package:markethub/constants/global_variables.dart';
+import 'package:markethub/features/account/screens/your_orders_screen.dart';
+import 'package:markethub/features/account/screens/addresses_screen.dart';
+import 'package:markethub/features/account/screens/notifications_screen.dart';
+import 'package:markethub/features/account/screens/wallet_screen.dart';
+import 'package:markethub/features/account/screens/edit_profile_screen.dart'; // Added
+import 'package:markethub/features/account/screens/help_center_screen.dart'; // Added
+import 'package:markethub/features/account/screens/loyalty_points_screen.dart'; // Added
+import 'package:markethub/features/account/screens/referral_screen.dart'; // Added
+import 'package:markethub/features/account/screens/safety_center_screen.dart'; // Added
+import 'package:markethub/features/account/screens/coupons_screen.dart'; // Added
+import 'package:markethub/features/content/screens/legal/privacy_policy_screen.dart'; // Added
+import 'package:markethub/features/content/screens/legal/terms_conditions_screen.dart'; // Added
+import 'package:markethub/features/content/screens/about_us_screen.dart'; // Added
+import 'package:markethub/features/content/screens/blog_screen.dart'; // Added
+import 'package:markethub/features/corporate/screens/sustainability_report_screen.dart';
+import 'package:markethub/features/account/screens/feedback_screen.dart'; // Added
+import 'package:markethub/features/account/screens/settings_screen.dart';
+import 'package:markethub/features/hub/screens/plus_subscription_screen.dart';
+import 'package:markethub/features/auth/screens/auth_screen.dart';
+import 'package:markethub/providers/user_provider.dart';
+import 'package:markethub/providers/localization_provider.dart';
+import 'package:markethub/localization/language_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AccountScreen extends StatelessWidget {
+  static const String routeName = '/account';
   const AccountScreen({super.key});
 
   void logOut(BuildContext context) {

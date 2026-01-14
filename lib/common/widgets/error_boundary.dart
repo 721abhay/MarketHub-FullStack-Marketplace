@@ -10,7 +10,7 @@ class ErrorBoundary extends StatefulWidget {
 
 class _ErrorBoundaryState extends State<ErrorBoundary> {
   bool _hasError = false;
-  String _errorMsg = '';
+  final String _errorMsg = '';
 
   @override
   void initState() {

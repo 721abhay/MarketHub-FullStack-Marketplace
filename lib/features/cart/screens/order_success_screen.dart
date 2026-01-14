@@ -1,4 +1,4 @@
-import 'package:amazon_clone/features/home/screens/home_screen.dart';
+import 'package:markethub/features/home/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 

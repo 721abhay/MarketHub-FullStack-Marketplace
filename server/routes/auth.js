@@ -63,4 +63,34 @@ authRouter.post("/api/signin", async (req, res) => {
     }
 });
 
+authRouter.post("/tokenIsValid", async (req, res) => {
+    try {
+        const token = req.header("x-auth-token");
+        if (!token) return res.json(false);
+        const verified = jwt.verify(token, "passwordKey");
+        if (!verified) return res.json(false);
+
+        const user = await User.findById(verified.id);
+        if (!user) return res.json(false);
+        res.json(true);
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// get user data
+authRouter.get("/", async (req, res) => {
+    try {
+        const token = req.header("x-auth-token");
+        if (!token) return res.status(401).json({ msg: "No auth token, access denied" });
+        const verified = jwt.verify(token, "passwordKey");
+        if (!verified) return res.status(401).json({ msg: "Token verification failed, authorization denied" });
+
+        const user = await User.findById(verified.id);
+        res.json({ ...user._doc, token: token });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
 module.exports = authRouter;

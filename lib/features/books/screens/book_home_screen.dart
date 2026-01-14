@@ -1,4 +1,3 @@
-import 'package:amazon_clone/constants/global_variables.dart';
 import 'package:flutter/material.dart';
 
 class BookHomeScreen extends StatelessWidget {

@@ -1,6 +1,6 @@
-import 'package:amazon_clone/features/account/widgets/account_button.dart';
-import 'package:amazon_clone/features/auth/screens/auth_screen.dart';
-import 'package:amazon_clone/providers/user_provider.dart';
+import 'package:markethub/features/account/widgets/account_button.dart';
+import 'package:markethub/features/auth/screens/auth_screen.dart';
+import 'package:markethub/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,4 +1,4 @@
-import 'package:amazon_clone/features/travel/screens/seat_selection_screen.dart';
+import 'package:markethub/features/travel/screens/seat_selection_screen.dart';
 import 'package:flutter/material.dart';
 
 class FlightSearchScreen extends StatelessWidget {

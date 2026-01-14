@@ -1,9 +1,9 @@
-import 'package:amazon_clone/features/hub/screens/main_hub_dashboard.dart';
-import 'package:amazon_clone/features/hub/screens/plus_subscription_screen.dart';
-import 'package:amazon_clone/features/hub/screens/qr_scanner_screen.dart';
-import 'package:amazon_clone/features/hub/screens/universal_ai_search_screen.dart';
-import 'package:amazon_clone/features/hub/screens/rewards_catalog_screen.dart';
-import 'package:amazon_clone/features/hub/screens/partner_program_screen.dart';
+import 'package:markethub/features/hub/screens/main_hub_dashboard.dart';
+import 'package:markethub/features/hub/screens/plus_subscription_screen.dart';
+import 'package:markethub/features/hub/screens/qr_scanner_screen.dart';
+import 'package:markethub/features/hub/screens/universal_ai_search_screen.dart';
+import 'package:markethub/features/hub/screens/rewards_catalog_screen.dart';
+import 'package:markethub/features/hub/screens/partner_program_screen.dart';
 import 'package:flutter/material.dart';
 
 class HubRouter {

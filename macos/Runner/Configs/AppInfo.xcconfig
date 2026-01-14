@@ -5,10 +5,10 @@
 // 'flutter create' template.
 
 // The application's name. By default this is also the title of the Flutter window.
-PRODUCT_NAME = amazon_clone
+PRODUCT_NAME = MarketHub
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.abhay.amazonclone.amazonClone
+PRODUCT_BUNDLE_IDENTIFIER = com.abhay.markethub
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2025 com.abhay.amazon_clone. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2026 com.abhay.markethub. All rights reserved.

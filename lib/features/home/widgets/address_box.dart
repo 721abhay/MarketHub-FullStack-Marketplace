@@ -1,4 +1,4 @@
-import 'package:amazon_clone/providers/user_provider.dart';
+import 'package:markethub/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,44 +10,34 @@ class AddressBox extends StatelessWidget {
     final user = Provider.of<UserProvider>(context).user;
 
     return Container(
-      height: 40,
+      height: 44,
       decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color.fromARGB(255, 114, 226, 221),
-            Color.fromARGB(255, 162, 236, 233),
-          ],
-          stops: [0.5, 1.0],
-        ),
+        color: Color(0xFFF1F5F9), // Slate 100
       ),
-      padding: const EdgeInsets.only(left: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: [
           const Icon(
-            Icons.location_on_outlined,
-            size: 20,
+            Icons.location_on_rounded,
+            size: 18,
+            color: Color(0xFF6366F1),
           ),
+          const SizedBox(width: 8),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 5),
-              child: Text(
-                'Delivery to ${user.name} - ${user.address.isEmpty ? 'Set Your Address' : user.address}',
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  overflow: TextOverflow.ellipsis,
-                ),
+            child: Text(
+              'Delivery to ${user.name} • ${user.address.isEmpty ? 'Add your address' : user.address}',
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 12,
+                color: Color(0xFF475569), // Slate 600
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.only(
-              left: 5,
-              top: 2,
-            ),
-            child: Icon(
-              Icons.arrow_drop_down_outlined,
-              size: 18,
-            ),
+          const Icon(
+            Icons.keyboard_arrow_down_rounded,
+            size: 18,
+            color: Color(0xFF94A3B8),
           )
         ],
       ),

@@ -1,6 +1,6 @@
-import 'package:amazon_clone/features/finance/screens/crypto_vault_screen.dart';
-import 'package:amazon_clone/features/finance/screens/insurance_screen.dart';
-import 'package:amazon_clone/features/finance/screens/stock_tracker_screen.dart';
+import 'package:markethub/features/finance/screens/crypto_vault_screen.dart';
+import 'package:markethub/features/finance/screens/insurance_screen.dart';
+import 'package:markethub/features/finance/screens/stock_tracker_screen.dart';
 import 'package:flutter/material.dart';
 
 class FinanceHomeScreen extends StatelessWidget {

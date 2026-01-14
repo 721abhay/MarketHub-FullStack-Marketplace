@@ -1,4 +1,4 @@
-package com.abhay.amazon_clone.amazon_clone
+package com.abhay.markethub
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 

@@ -1,4 +1,4 @@
-import 'package:amazon_clone/models/order.dart';
+import 'package:markethub/models/order.dart';
 import 'package:flutter/material.dart';
 
 class ShipmentManifestScreen extends StatelessWidget {

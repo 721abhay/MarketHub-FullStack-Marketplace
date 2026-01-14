@@ -1,5 +1,5 @@
-import 'package:amazon_clone/common/widgets/custom_button.dart';
-import 'package:amazon_clone/constants/global_variables.dart';
+import 'package:markethub/common/widgets/custom_button.dart';
+import 'package:markethub/constants/global_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 

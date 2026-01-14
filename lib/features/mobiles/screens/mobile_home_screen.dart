@@ -1,5 +1,4 @@
-import 'package:amazon_clone/features/home/screens/buying_guide_screen.dart';
-import 'package:amazon_clone/constants/global_variables.dart';
+import 'package:markethub/features/home/screens/buying_guide_screen.dart';
 import 'package:flutter/material.dart';
 
 class MobileHomeScreen extends StatelessWidget {

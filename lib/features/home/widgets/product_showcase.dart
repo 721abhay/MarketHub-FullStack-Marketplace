@@ -1,7 +1,7 @@
-import 'package:amazon_clone/common/widgets/glass_container.dart';
-import 'package:amazon_clone/common/widgets/shimmer_loader.dart';
-import 'package:amazon_clone/features/product_details/screens/product_details_screen.dart';
-import 'package:amazon_clone/models/product.dart';
+import 'package:markethub/common/widgets/glass_container.dart';
+import 'package:markethub/common/widgets/shimmer_loader.dart';
+import 'package:markethub/features/product_details/screens/product_details_screen.dart';
+import 'package:markethub/models/product.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 

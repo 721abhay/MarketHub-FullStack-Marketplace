@@ -1,4 +1,4 @@
-import 'package:amazon_clone/features/finance/screens/file_claim_screen.dart';
+import 'package:markethub/features/finance/screens/file_claim_screen.dart';
 import 'package:flutter/material.dart';
 
 class InsuranceCenterScreen extends StatelessWidget {
@@ -18,7 +18,7 @@ class InsuranceCenterScreen extends StatelessWidget {
             const SizedBox(height: 32),
             _buildProtectionCategories(),
             const SizedBox(height: 32),
-             _buildEmergencyAction(),
+             _buildEmergencyAction(context),
           ],
         ),
       ),
@@ -62,7 +62,7 @@ class InsuranceCenterScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildEmergencyAction() {
+  Widget _buildEmergencyAction(BuildContext context) {
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, FileClaimScreen.routeName),
       child: Container(

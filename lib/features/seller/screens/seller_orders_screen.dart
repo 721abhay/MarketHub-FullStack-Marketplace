@@ -1,11 +1,11 @@
-import 'package:amazon_clone/common/widgets/loader.dart';
-import 'package:amazon_clone/constants/global_variables.dart';
-import 'package:amazon_clone/features/seller/screens/seller_order_detail_screen.dart';
-import 'package:amazon_clone/features/seller/services/seller_services.dart';
-import 'package:amazon_clone/models/order.dart';
+import 'package:markethub/common/widgets/loader.dart';
+import 'package:markethub/constants/global_variables.dart';
+import 'package:markethub/features/seller/screens/seller_order_detail_screen.dart';
+import 'package:markethub/features/seller/services/seller_services.dart';
+import 'package:markethub/models/order.dart';
 import 'package:flutter/material.dart';
 
-import 'package:amazon_clone/providers/user_provider.dart'; // Added
+import 'package:markethub/providers/user_provider.dart'; // Added
 import 'package:provider/provider.dart'; // Added
 
 class SellerOrdersScreen extends StatefulWidget {
