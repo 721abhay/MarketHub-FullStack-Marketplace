@@ -17,26 +17,26 @@ class Language {
   }
 }
 
-const String LANGUAGE_CODE = 'languageCode';
+const String languageCodeConstant = 'languageCode';
 
 //languages code
-const String ENGLISH = 'en';
-const String HINDI = 'hi';
-const String SPANISH = 'es';
+const String english = 'en';
+const String hindi = 'hi';
+const String spanish = 'es';
 
 Future<Locale> setLocale(String languageCode) async {
   return Locale(languageCode, '');
 }
 
-Locale _locale(String languageCode) {
+Locale getLocale(String languageCode) {
   switch (languageCode) {
-    case ENGLISH:
-      return const Locale(ENGLISH, '');
-    case HINDI:
-      return const Locale(HINDI, '');
-    case SPANISH:
-      return const Locale(SPANISH, '');
+    case english:
+      return const Locale(english, '');
+    case hindi:
+      return const Locale(hindi, '');
+    case spanish:
+      return const Locale(spanish, '');
     default:
-      return const Locale(ENGLISH, '');
+      return const Locale(english, '');
   }
 }

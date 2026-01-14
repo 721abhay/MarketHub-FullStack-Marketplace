@@ -2,6 +2,7 @@ import 'package:amazon_clone/constants/global_variables.dart';
 import 'package:amazon_clone/features/account/screens/account_screen.dart';
 import 'package:amazon_clone/features/cart/screens/cart_screen.dart';
 import 'package:amazon_clone/features/home/screens/home_screen.dart';
+import 'package:amazon_clone/features/hub/screens/main_hub_dashboard.dart';
 import 'package:amazon_clone/features/seller/screens/dashboard_screen.dart';
 import 'package:amazon_clone/features/seller/screens/products_screen.dart';
 import 'package:amazon_clone/features/seller/screens/seller_orders_screen.dart';
@@ -27,6 +28,7 @@ class _BottomBarState extends State<BottomBar> {
 
   List<Widget> buyerPages = [
     const HomeScreen(),
+    const MainHubDashboard(),
     const AccountScreen(),
     const CartScreen(),
   ];
@@ -68,6 +70,10 @@ class _BottomBarState extends State<BottomBar> {
       const BottomNavigationBarItem(
         icon: Icon(Icons.home_max_rounded),
         label: 'Home',
+      ),
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.hub_rounded),
+        label: 'Hub',
       ),
       const BottomNavigationBarItem(
         icon: Icon(Icons.person_pin_rounded),
@@ -121,7 +127,7 @@ class _BottomBarState extends State<BottomBar> {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, -4),
             ),

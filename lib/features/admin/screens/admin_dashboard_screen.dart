@@ -20,7 +20,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     fetchAnalytics();
   }
 
-  fetchAnalytics() async {
+  Future<void> fetchAnalytics() async {
     analytics = await adminServices.getAnalytics(context);
     setState(() {});
   }
@@ -148,7 +148,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -159,7 +159,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Icon(icon, color: color, size: 32),
@@ -200,7 +200,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
+            color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),

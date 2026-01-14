@@ -28,6 +28,9 @@ class AuthService {
         type: type,
         token: '',
         cart: [],
+        recentlyViewed: [],
+        wishlist: [],
+        wallet: 0.0,
         sellerDetails: null,
       );
 

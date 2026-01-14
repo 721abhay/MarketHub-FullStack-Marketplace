@@ -12,6 +12,9 @@ class UserProvider extends ChangeNotifier {
     type: '',
     token: '',
     cart: [],
+    recentlyViewed: [],
+    wishlist: [],
+    wallet: 0.0,
     sellerDetails: null,
   );
 
@@ -32,6 +35,9 @@ class UserProvider extends ChangeNotifier {
       type: '',
       token: '',
       cart: [],
+      recentlyViewed: [],
+      wishlist: [],
+      wallet: 0.0,
       sellerDetails: null,
     );
     notifyListeners();
@@ -78,25 +84,5 @@ class UserProvider extends ChangeNotifier {
   void clearCart() {
     _user = _user.copyWith(cart: []);
     notifyListeners();
-  }
-}
-
-extension UserCopyWith on User {
-  User copyWith({
-    List<dynamic>? cart,
-    String? type,
-    SellerDetails? sellerDetails,
-  }) {
-    return User(
-      id: id,
-      name: name,
-      email: email,
-      password: password,
-      address: address,
-      type: type ?? this.type,
-      token: token,
-      cart: cart ?? this.cart,
-      sellerDetails: sellerDetails ?? this.sellerDetails,
-    );
   }
 }

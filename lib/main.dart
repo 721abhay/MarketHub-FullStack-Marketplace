@@ -1,8 +1,9 @@
 import 'package:amazon_clone/common/widgets/bottom_bar.dart';
-import 'package:amazon_clone/constants/global_variables.dart';
+import 'package:amazon_clone/common/widgets/error_boundary.dart';
 import 'package:amazon_clone/providers/user_provider.dart';
 import 'package:amazon_clone/providers/localization_provider.dart';
-import 'package:amazon_clone/router.dart';
+import 'package:amazon_clone/router/app_router.dart';
+import 'package:amazon_clone/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +15,7 @@ void main() {
     ChangeNotifierProvider(
       create: (context) => LocalizationProvider(),
     ),
-  ], child: const MyApp()));
+  ], child: const ErrorBoundary(child: MyApp())));
 }
 
 class MyApp extends StatelessWidget {
@@ -25,19 +26,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'MarketHub',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        scaffoldBackgroundColor: GlobalVariables.backgroundColor,
-        colorScheme: const ColorScheme.light(
-          primary: GlobalVariables.secondaryColor,
-        ),
-        appBarTheme: const AppBarTheme(
-          elevation: 0,
-          iconTheme: IconThemeData(
-            color: Colors.black,
-          ),
-        ),
-      ),
-      onGenerateRoute: (settings) => generateRoute(settings),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.system,
+      onGenerateRoute: (settings) => AppRouter.onGenerateRoute(settings),
       home: const BottomBar(), // SKIP AUTH - GO DIRECTLY TO HOME
     );
   }

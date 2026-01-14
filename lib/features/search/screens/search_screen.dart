@@ -1,6 +1,7 @@
 import 'package:amazon_clone/common/widgets/loader.dart';
 import 'package:amazon_clone/constants/global_variables.dart';
 import 'package:amazon_clone/features/product_details/screens/product_details_screen.dart';
+import 'package:amazon_clone/features/search/screens/filter_screen.dart'; // Added
 import 'package:amazon_clone/features/search/services/search_services.dart';
 import 'package:amazon_clone/features/search/widgets/searched_product.dart';
 import 'package:amazon_clone/models/product.dart';
@@ -193,14 +194,36 @@ class _SearchScreenState extends State<SearchScreen> {
         color: Colors.white,
         border: Border(bottom: BorderSide(color: Color(0xFFE2E8F0))),
       ),
+      margin: const EdgeInsets.only(right: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListView(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         children: [
-           _FilterBadge(label: 'All Categories', isActive: true),
-           _FilterBadge(label: 'Top Rated'),
-           _FilterBadge(label: 'MarketHub Verified'),
-           _FilterBadge(label: 'Fast Delivery'),
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, FilterScreen.routeName);
+              },
+              child: Container(
+                margin: const EdgeInsets.only(right: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                 decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: const Color(0xFF6366F1)),
+                ),
+                child: const Row(
+                  children: [
+                    Icon(Icons.tune_rounded, size: 16, color: Color(0xFF6366F1)),
+                    SizedBox(width: 4),
+                    Text('Filters', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF6366F1))),
+                  ],
+                ),
+              ),
+            ),
+           const _FilterBadge(label: 'All Categories', isActive: true),
+           const _FilterBadge(label: 'Top Rated'),
+           const _FilterBadge(label: 'MarketHub Verified'),
         ],
       ),
     );

@@ -109,7 +109,7 @@ class _SellerPayoutScreenState extends State<SellerPayoutScreen> {
         borderRadius: BorderRadius.circular(32),
         border: Border.all(color: const Color(0xFFE2E8F0)),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 20, offset: const Offset(0, 10)),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 20, offset: const Offset(0, 10)),
         ],
       ),
       child: Column(
@@ -236,7 +236,7 @@ class _SellerPayoutScreenState extends State<SellerPayoutScreen> {
     
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
+      decoration: BoxDecoration(color: color.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(12)),
       child: Text(
         status.toUpperCase(),
         style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.bold),

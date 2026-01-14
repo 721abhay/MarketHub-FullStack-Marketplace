@@ -1,5 +1,7 @@
 import 'package:amazon_clone/common/widgets/custom_button.dart';
 import 'package:amazon_clone/constants/global_variables.dart';
+import 'package:amazon_clone/features/order_details/screens/return_request_screen.dart'; // Added
+import 'package:amazon_clone/features/order_details/screens/return_status_screen.dart'; // Added
 import 'package:amazon_clone/features/seller/services/seller_services.dart';
 import 'package:amazon_clone/models/order.dart';
 import 'package:amazon_clone/providers/user_provider.dart';
@@ -88,7 +90,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                    Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
@@ -109,7 +111,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   Text(
                     'Order placed on ${DateFormat('MMM dd, yyyy').format(DateTime.fromMillisecondsSinceEpoch(widget.order.orderedAt))}',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.8),
+                      color: Colors.white.withValues(alpha: 0.8),
                       fontSize: 14,
                     ),
                   ),
@@ -168,6 +170,35 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     ),
                      const SizedBox(height: 20),
                   ],
+
+                  // BUYER CONTROLS (Returns)
+                  if (user.type == 'user' && currentStep >= 3) ...[
+                     const Divider(),
+                     const SizedBox(height: 20),
+                     CustomButton(
+                       text: 'Return or Exchange Item',
+                       onTap: () {
+                         Navigator.pushNamed(
+                           context, 
+                           ReturnRequestScreen.routeName,
+                           arguments: widget.order,
+                         );
+                       },
+                       color: Colors.redAccent,
+                     ),
+                  ],
+                  
+                  // Mock button to see Status
+                  if (user.type == 'user') ...[
+                    const SizedBox(height: 12),
+                    Center(
+                      child: TextButton(
+                        onPressed: () => Navigator.pushNamed(context, ReturnStatusScreen.routeName),
+                        child: const Text('View Return Status (Demo)', style: TextStyle(color: Colors.blue)),
+                      ),
+                    ),
+                  ],
+                  const SizedBox(height: 20),
                 ],
               ),
             ),
@@ -185,7 +216,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
+            color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -215,7 +246,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
         Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             shape: BoxShape.circle,
             border: Border.all(color: color, width: 2),
           ),

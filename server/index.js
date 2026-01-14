@@ -15,9 +15,28 @@ const promoRouter = require('./routes/promo');
 const PORT = process.env.PORT || 3000;
 const app = express();
 
+const helmet = require('helmet');
+const morgan = require('morgan');
+const logger = require('./utils/logger');
+
+const { apiLimiter, authLimiter } = require('./middlewares/rateLimit');
+
 // middleware
+app.use(helmet()); // Secure HTTP headers
 app.use(cors());
 app.use(express.json());
+app.use(morgan('combined', { stream: { write: message => logger.info(message.trim()) } })); // Log HTTP requests
+
+// Rate Limiting (DDoS Protection)
+app.use('/api', apiLimiter); // Apply to all API routes
+app.use('/api/signup', authLimiter); // Strict
+app.use('/api/signin', authLimiter); // Strict
+
+// DEBUG LOGGER (Legacy wrapper)
+app.use((req, res, next) => {
+  // logger.info(`${req.method} ${req.url}`); // Handled by morgan
+  next();
+});
 app.use(authRouter);
 app.use(adminRouter);
 app.use(sellerRouter);

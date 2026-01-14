@@ -5,6 +5,7 @@ import 'package:amazon_clone/constants/error_handling.dart';
 import 'package:amazon_clone/constants/global_variables.dart';
 import 'package:amazon_clone/constants/utils.dart';
 import 'package:amazon_clone/features/address/services/address_services.dart';
+import 'package:amazon_clone/features/cart/screens/order_success_screen.dart';
 import 'package:amazon_clone/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -22,41 +23,7 @@ class AddressScreen extends StatefulWidget {
   State<AddressScreen> createState() => _AddressScreenState();
 }
 
-class _OrderDetailSuccessDialog extends StatelessWidget {
-  final String total;
-  const _OrderDetailSuccessDialog({required this.total});
 
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-      title: const Text('Order Placed!', style: TextStyle(fontWeight: FontWeight.bold)),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(Icons.check_circle_rounded, color: Color(0xFF10B981), size: 80),
-          const SizedBox(height: 20),
-          Text(
-            'Woohoo! Your order of \$$total has been placed successfully.',
-            textAlign: TextAlign.center,
-            style: const TextStyle(color: Color(0xFF64748B)),
-          ),
-        ],
-      ),
-      actions: [
-        Padding(
-          padding: const EdgeInsets.all(12),
-          child: CustomButton(
-            text: 'Done',
-            onTap: () {
-              Navigator.popUntil(context, (route) => route.isFirst);
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
 
 class _AddressScreenState extends State<AddressScreen> {
   final TextEditingController flatBuildingController = TextEditingController();
@@ -102,7 +69,7 @@ class _AddressScreenState extends State<AddressScreen> {
         }),
       );
 
-      if (!context.mounted) return;
+      if (!mounted) return;
       httpErrorHandle(
         response: res,
         context: context,
@@ -121,6 +88,7 @@ class _AddressScreenState extends State<AddressScreen> {
         },
       );
     } catch (e) {
+      if (!mounted) return;
       showSnackBar(context, e.toString());
     } finally {
       if (mounted) setState(() => _isCheckingPromo = false);
@@ -140,11 +108,7 @@ class _AddressScreenState extends State<AddressScreen> {
         totalSum: finalTotal,
       );
 
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => _OrderDetailSuccessDialog(total: finalTotal.toStringAsFixed(2)),
-      );
+      Navigator.pushNamedAndRemoveUntil(context, OrderSuccessScreen.routeName, (route) => false);
     }
   }
 
@@ -216,7 +180,7 @@ class _AddressScreenState extends State<AddressScreen> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16),
-                        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: const Offset(0, 4))],
+                        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 10, offset: const Offset(0, 4))],
                       ),
                       child: CustomTextField(
                         controller: _promoController,
@@ -259,7 +223,7 @@ class _AddressScreenState extends State<AddressScreen> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(24),
                   boxShadow: [
-                    BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: const Offset(0, 4)),
+                    BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 10, offset: const Offset(0, 4)),
                   ],
                 ),
                 child: Column(
@@ -300,7 +264,7 @@ class _AddressScreenState extends State<AddressScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: const Offset(0, 4))],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 10, offset: const Offset(0, 4))],
       ),
       child: CustomTextField(
         controller: controller,

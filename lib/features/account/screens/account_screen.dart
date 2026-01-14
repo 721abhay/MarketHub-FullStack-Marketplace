@@ -3,6 +3,20 @@ import 'package:amazon_clone/features/account/screens/your_orders_screen.dart';
 import 'package:amazon_clone/features/account/screens/addresses_screen.dart';
 import 'package:amazon_clone/features/account/screens/notifications_screen.dart';
 import 'package:amazon_clone/features/account/screens/wallet_screen.dart';
+import 'package:amazon_clone/features/account/screens/edit_profile_screen.dart'; // Added
+import 'package:amazon_clone/features/account/screens/help_center_screen.dart'; // Added
+import 'package:amazon_clone/features/account/screens/loyalty_points_screen.dart'; // Added
+import 'package:amazon_clone/features/account/screens/referral_screen.dart'; // Added
+import 'package:amazon_clone/features/account/screens/safety_center_screen.dart'; // Added
+import 'package:amazon_clone/features/account/screens/coupons_screen.dart'; // Added
+import 'package:amazon_clone/features/content/screens/legal/privacy_policy_screen.dart'; // Added
+import 'package:amazon_clone/features/content/screens/legal/terms_conditions_screen.dart'; // Added
+import 'package:amazon_clone/features/content/screens/about_us_screen.dart'; // Added
+import 'package:amazon_clone/features/content/screens/blog_screen.dart'; // Added
+import 'package:amazon_clone/features/corporate/screens/sustainability_report_screen.dart';
+import 'package:amazon_clone/features/account/screens/feedback_screen.dart'; // Added
+import 'package:amazon_clone/features/account/screens/settings_screen.dart';
+import 'package:amazon_clone/features/hub/screens/plus_subscription_screen.dart';
 import 'package:amazon_clone/features/auth/screens/auth_screen.dart';
 import 'package:amazon_clone/providers/user_provider.dart';
 import 'package:amazon_clone/providers/localization_provider.dart';
@@ -72,7 +86,7 @@ class AccountScreen extends StatelessWidget {
           actions: [
             IconButton(
               icon: const Icon(Icons.settings_outlined, color: Colors.white),
-              onPressed: () {},
+              onPressed: () => Navigator.pushNamed(context, GeneralSettingsScreen.routeName),
             ),
           ],
         ),
@@ -80,8 +94,8 @@ class AccountScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _buildProfileHeader(user),
-            
+            _buildProfileHeader(context, user),
+            _buildEliteStatus(context),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
               child: Column(
@@ -123,10 +137,12 @@ class AccountScreen extends StatelessWidget {
                   _buildSettingsSection([
                     _SettingsItem(Icons.location_on_outlined, 'Edit Address', 'Manage shipping locations', onTap: () => Navigator.pushNamed(context, AddressesScreen.routeName)),
                     _SettingsItem(Icons.account_balance_wallet_outlined, 'MarketHub Wallet', 'Balance, History, and Top Up', onTap: () => Navigator.pushNamed(context, WalletScreen.routeName)),
-                    _SettingsItem(Icons.person_outline, 'Personal Information', 'Name, Email, Phone'),
+                    _SettingsItem(Icons.monetization_on_outlined, 'MarketHub Coins', 'Rewards & Redemptions', onTap: () => Navigator.pushNamed(context, LoyaltyPointsScreen.routeName)),
+                    _SettingsItem(Icons.person_outline, 'Personal Information', 'Name, Email, Phone', onTap: () => Navigator.pushNamed(context, EditProfileScreen.routeName)),
+                    _SettingsItem(Icons.card_giftcard_rounded, 'My Coupons', 'Discounts & Offers', onTap: () => Navigator.pushNamed(context, CouponsScreen.routeName)),
+                    _SettingsItem(Icons.security_outlined, 'Security', 'Password, 2-Step Verification', onTap: () => Navigator.pushNamed(context, SafetyCenterScreen.routeName)),
+                     _SettingsItem(Icons.group_add_outlined, 'Invite Friends', 'Get \$50 for every friend', onTap: () => Navigator.pushNamed(context, ReferralScreen.routeName)),
                     _SettingsItem(Icons.language_rounded, 'App Language', 'English, Spanish, Hindi', onTap: () => _showLanguageDialog(context)),
-                    _SettingsItem(Icons.security_outlined, 'Security', 'Password, 2-Step Verification'),
-                    _SettingsItem(Icons.payment_outlined, 'Payment Methods', 'Manage cards and wallets'),
                   ]),
 
                    const SizedBox(height: 32),
@@ -137,8 +153,13 @@ class AccountScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                    _buildSettingsSection([
-                    _SettingsItem(Icons.help_outline_rounded, 'Help Center', 'FAQs and Support help'),
-                    _SettingsItem(Icons.policy_outlined, 'Privacy Policy', 'Our data practices'),
+                    _SettingsItem(Icons.help_outline_rounded, 'Help Center', 'FAQs and Support help', onTap: () => Navigator.pushNamed(context, HelpCenterScreen.routeName)),
+                    _SettingsItem(Icons.article_outlined, 'MarketHub Blog', 'News & Insights', onTap: () => Navigator.pushNamed(context, BlogScreen.routeName)),
+                    _SettingsItem(Icons.eco_outlined, 'Sustainability Hub', 'View your eco-impact', onTap: () => Navigator.pushNamed(context, SustainabilityReportScreen.routeName)),
+                    _SettingsItem(Icons.info_outline_rounded, 'About Us', 'Our Mission & Story', onTap: () => Navigator.pushNamed(context, AboutUsScreen.routeName)),
+                    _SettingsItem(Icons.feedback_outlined, 'Send Feedback', 'Rate us & share thoughts', onTap: () => Navigator.pushNamed(context, FeedbackScreen.routeName)),
+                    _SettingsItem(Icons.privacy_tip_outlined, 'Privacy Policy', 'Data usage & rights', onTap: () => Navigator.pushNamed(context, PrivacyPolicyScreen.routeName)),
+                    _SettingsItem(Icons.gavel_rounded, 'Terms & Conditions', 'Legal agreement', onTap: () => Navigator.pushNamed(context, TermsConditionsScreen.routeName)),
                   ]),
 
                   const SizedBox(height: 48),
@@ -155,7 +176,7 @@ class AccountScreen extends StatelessWidget {
                       ),
                       style: TextButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
-                        backgroundColor: Colors.redAccent.withOpacity(0.05),
+                        backgroundColor: Colors.redAccent.withValues(alpha: 0.05),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                       ),
                     ),
@@ -170,7 +191,63 @@ class AccountScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileHeader(dynamic user) {
+  Widget _buildEliteStatus(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1E293B),
+        borderRadius: BorderRadius.circular(28),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.amber.withValues(alpha: 0.1),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(Icons.stars_rounded, color: Colors.amber, size: 32),
+          ),
+          const SizedBox(width: 20),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'MarketHub Elite',
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+                Text(
+                  'Premium Member since 2024',
+                  style: TextStyle(color: Colors.white.withValues(alpha: 0.5), fontSize: 12),
+                ),
+              ],
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pushNamed(context, MarketHubPlusScreen.routeName),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.amber,
+              foregroundColor: Colors.black,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            ),
+            child: const Text('Manage', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProfileHeader(BuildContext context, dynamic user) {
     return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
@@ -206,22 +283,25 @@ class AccountScreen extends StatelessWidget {
                 ),
                 Text(
                   user.email,
-                  style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 14),
+                  style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 14),
                 ),
                 const SizedBox(height: 12),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.stars_rounded, color: Colors.amber, size: 16),
-                      SizedBox(width: 4),
-                      Text('MarketHub Gold Member', style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
-                    ],
+                GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, MarketHubPlusScreen.routeName),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.stars_rounded, color: Colors.amber, size: 16),
+                        SizedBox(width: 4),
+                        Text('MarketHub Gold Member', style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -241,7 +321,7 @@ class AccountScreen extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
-            BoxShadow(color: color.withOpacity(0.1), blurRadius: 20, offset: const Offset(0, 8)),
+            BoxShadow(color: color.withValues(alpha: 0.1), blurRadius: 20, offset: const Offset(0, 8)),
           ],
         ),
         child: Column(
@@ -249,7 +329,7 @@ class AccountScreen extends StatelessWidget {
           children: [
             Container(
               padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(14)),
+              decoration: BoxDecoration(color: color.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(14)),
               child: Icon(icon, color: color, size: 24),
             ),
             const SizedBox(height: 16),

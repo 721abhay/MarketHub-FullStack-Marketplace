@@ -16,24 +16,24 @@ class GlobalVariables {
   static const accentColor = Color(0xFFF59E0B); // Amber for CTA
   static const backgroundColor = Colors.white;
   static const Color greyBackgroundCOlor = Color(0xfff8fafc); // Slate 50
-  static var selectedNavBarColor = const Color(0xFF6366F1);
+  static const Color selectedNavBarColor = Color(0xFF6366F1);
   static const unselectedNavBarColor = Color(0xFF64748B); // Slate 500
 
   // Phase 4: Glassmorphism Tokens
   static BoxDecoration glassmorphicDecoration = BoxDecoration(
-    color: Colors.white.withOpacity(0.4),
+    color: Colors.white.withValues(alpha: 0.4),
     borderRadius: BorderRadius.circular(24),
-    border: Border.all(color: Colors.white.withOpacity(0.4), width: 1.5),
+    border: Border.all(color: Colors.white.withValues(alpha: 0.4), width: 1.5),
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.05),
+        color: Colors.black.withValues(alpha: 0.05),
         blurRadius: 20,
         offset: const Offset(0, 10),
       ),
     ],
   );
 
-  static Color glassColor = Colors.white.withOpacity(0.2);
+  static Color glassColor = Colors.white.withValues(alpha: 0.2);
   static double glassBlur = 10.0;
 
   // STATIC IMAGES
@@ -43,8 +43,24 @@ class GlobalVariables {
       'image': 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=200&auto=format&fit=crop',
     },
     {
-      'title': 'Essentials',
-      'image': 'https://images.unsplash.com/photo-1583947215259-38e31be8751f?q=80&w=200&auto=format&fit=crop',
+      'title': 'Grocery',
+      'image': 'https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=200&auto=format&fit=crop',
+    },
+    {
+      'title': 'Milk Sub',
+      'image': 'https://images.unsplash.com/photo-1528498033373-3c6c08e93d79?q=80&w=200&auto=format&fit=crop',
+    },
+    {
+      'title': 'Coupons',
+      'image': 'https://images.unsplash.com/photo-1553531384-cc64ac80f931?q=80&w=200&auto=format&fit=crop',
+    },
+    {
+      'title': 'Market Hub',
+      'image': 'https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=200&auto=format&fit=crop',
+    },
+    {
+      'title': 'Deals',
+      'image': 'https://images.unsplash.com/photo-1607082349566-187342175e2f?q=80&w=200&auto=format&fit=crop',
     },
     {
       'title': 'Appliances',

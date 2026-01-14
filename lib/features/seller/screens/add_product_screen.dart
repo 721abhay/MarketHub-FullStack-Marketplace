@@ -5,7 +5,6 @@ import 'package:amazon_clone/constants/global_variables.dart';
 import 'package:amazon_clone/constants/utils.dart';
 import 'package:amazon_clone/features/seller/services/seller_services.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 
 class AddProductScreen extends StatefulWidget {

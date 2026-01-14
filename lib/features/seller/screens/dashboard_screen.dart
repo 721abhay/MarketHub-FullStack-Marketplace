@@ -1,12 +1,16 @@
 import 'dart:ui';
+import 'package:amazon_clone/models/user.dart';
 import 'package:amazon_clone/common/widgets/glass_container.dart';
 import 'package:amazon_clone/common/widgets/loader.dart';
-import 'package:amazon_clone/constants/global_variables.dart';
 import 'package:amazon_clone/features/seller/screens/seller_payout_screen.dart';
 import 'package:amazon_clone/features/seller/services/seller_services.dart';
+import 'package:amazon_clone/features/seller/screens/seller_orders_screen.dart'; // Added
+import 'package:amazon_clone/features/seller/screens/coupons_manager_screen.dart'; // Added
+import 'package:amazon_clone/features/seller/screens/seller_analytics_screen.dart'; 
+import 'package:amazon_clone/features/seller/screens/inventory_report_screen.dart'; 
+import 'package:amazon_clone/features/seller/screens/campaign_manager_screen.dart'; 
 import 'package:amazon_clone/providers/user_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:provider/provider.dart';
 
 class SellerDashboardScreen extends StatefulWidget {
@@ -26,7 +30,7 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
     getAnalytics();
   }
 
-  getAnalytics() async {
+  Future<void> getAnalytics() async {
     final data = await sellerServices.getAnalytics(context);
     setState(() {
       analytics = data;
@@ -47,7 +51,7 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                   child: AppBar(
-                    backgroundColor: Colors.white.withOpacity(0.1),
+                    backgroundColor: Colors.white.withValues(alpha: 0.1),
                     elevation: 0,
                     title: const Text(
                       'MarketHub Intelligence',
@@ -61,7 +65,7 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    const Color(0xFF6366F1).withOpacity(0.1),
+                    const Color(0xFF6366F1).withValues(alpha: 0.1),
                     const Color(0xFFF8FAFC),
                   ],
                   begin: Alignment.topCenter,
@@ -87,7 +91,7 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
           );
   }
 
-  Widget _buildTopStats(user) {
+  Widget _buildTopStats(User user) {
     return Row(
       children: [
         Expanded(
@@ -178,7 +182,7 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
             const Text('Inventory AI', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1E293B))),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(color: const Color(0xFF10B981).withOpacity(0.1), borderRadius: BorderRadius.circular(10)),
+              decoration: BoxDecoration(color: const Color(0xFF10B981).withValues(alpha: 0.1), borderRadius: BorderRadius.circular(10)),
               child: const Text('SMART PREDICTIONS', style: TextStyle(color: Color(0xFF059669), fontSize: 9, fontWeight: FontWeight.bold)),
             ),
           ],
@@ -227,52 +231,90 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
   }
 
   Widget _buildQuickAction(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Pro Tools',
+           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1E293B)),
         ),
-        borderRadius: BorderRadius.circular(32),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF6366F1).withOpacity(0.3),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  'Scaling Up?',
-                  style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+        const SizedBox(height: 16),
+        SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                _buildProToolCard(
+                  'Analytics', 
+                  Icons.analytics_rounded, 
+                  Colors.purple, 
+                  () => Navigator.pushNamed(context, SellerAnalyticsScreen.routeName),
                 ),
-                SizedBox(height: 4),
-                Text(
-                  'Use our AI tools to optimize your listing titles.',
-                  style: TextStyle(color: Colors.white70, fontSize: 12),
+                 const SizedBox(width: 12),
+                 _buildProToolCard(
+                  'Inventory', 
+                  Icons.inventory_2_rounded, 
+                  Colors.orange, 
+                  () => Navigator.pushNamed(context, InventoryReportScreen.routeName),
+                ),
+                 const SizedBox(width: 12),
+                 _buildProToolCard(
+                  'Campaigns', 
+                  Icons.campaign_rounded, 
+                  Colors.blue, 
+                  () => Navigator.pushNamed(context, CampaignManagerScreen.routeName),
+                ),
+                const SizedBox(width: 12),
+                 _buildProToolCard(
+                  'Orders', 
+                  Icons.list_alt_rounded, 
+                  Colors.green, 
+                  () => Navigator.pushNamed(context, SellerOrdersScreen.routeName),
+                ),
+                const SizedBox(width: 12),
+                 _buildProToolCard(
+                  'Coupons', 
+                  Icons.local_offer_rounded, 
+                  Colors.pink, 
+                  () => Navigator.pushNamed(context, CouponsManagerScreen.routeName),
                 ),
               ],
             ),
-          ),
-          ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              foregroundColor: const Color(0xFF6366F1),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            ),
-            child: const Text('Add Product'),
-          ),
-        ],
-      ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildProToolCard(String title, IconData icon, Color color, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+       child: Container(
+         width: 100,
+         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 8),
+         decoration: BoxDecoration(
+           color: Colors.white,
+           borderRadius: BorderRadius.circular(16),
+           boxShadow: [
+             BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10),
+           ],
+         ),
+         child: Column(
+           children: [
+             Container(
+               padding: const EdgeInsets.all(12),
+               decoration: BoxDecoration(
+                 color: color.withValues(alpha: 0.1),
+                 shape: BoxShape.circle,
+               ),
+               child: Icon(icon, color: color, size: 24),
+             ),
+             const SizedBox(height: 12),
+             Text(
+               title,
+               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF1E293B)),
+             ),
+           ],
+         ),
+       ),
     );
   }
 }

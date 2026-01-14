@@ -34,7 +34,7 @@ class SearchedProduct extends StatelessWidget {
         border: Border.all(color: const Color(0xFFE2E8F0)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
+            color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -97,7 +97,7 @@ class SearchedProduct extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          '${avgRating.toStringAsFixed(1)}',
+                          avgRating.toStringAsFixed(1),
                           style: const TextStyle(fontSize: 11, color: Color(0xFF64748B), fontWeight: FontWeight.bold),
                         ),
                       ],

@@ -1,4 +1,5 @@
 import 'package:amazon_clone/features/account/screens/notifications_screen.dart';
+import 'package:amazon_clone/features/search/screens/visual_search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:amazon_clone/constants/global_variables.dart';
 import 'package:amazon_clone/features/home/widgets/address_box.dart';
@@ -8,8 +9,11 @@ import 'package:amazon_clone/features/home/widgets/product_showcase.dart';
 import 'package:amazon_clone/features/home/widgets/top_categories.dart';
 import 'package:amazon_clone/features/search/screens/search_screen.dart';
 import 'package:amazon_clone/models/product.dart';
+import 'package:amazon_clone/features/social/screens/community_feed_screen.dart'; // Added
 import 'package:amazon_clone/providers/user_provider.dart';
 import 'package:amazon_clone/providers/localization_provider.dart';
+import 'package:amazon_clone/features/grocery/screens/grocery_home_screen.dart'; // Added
+import 'package:amazon_clone/features/home/widgets/hub_preview.dart'; // Added
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -65,9 +69,13 @@ class _HomeScreenState extends State<HomeScreen> {
     final localization = context.watch<LocalizationProvider>();
 
     // Map recently viewed to Product objects
-    List<Product> recentlyViewedProducts = user.recentlyViewed.map((item) {
-      return Product.fromMap(item['product']);
-    }).toList();
+    // Map recently viewed to Product objects (Safety Check)
+    List<Product> recentlyViewedProducts = [];
+    for (int i = 0; i < user.recentlyViewed.length; i++) {
+      if (user.recentlyViewed[i]['product'] != null) {
+        recentlyViewedProducts.add(Product.fromMap(user.recentlyViewed[i]['product']));
+      }
+    }
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
@@ -90,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 10,
                         offset: const Offset(0, 4),
                       ),
@@ -98,21 +106,33 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   child: TextFormField(
                     onFieldSubmitted: navigateToSearchScreen,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.search_rounded, color: Color(0xFF6366F1)),
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.camera_alt_outlined, color: Color(0xFF6366F1)),
+                        onPressed: () => Navigator.pushNamed(context, VisualSearchScreen.routeName),
+                      ),
                       hintText: localization.translate('search_hint'),
                       hintStyle: const TextStyle(fontSize: 15, color: Color(0xFF94A3B8)),
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.symmetric(vertical: 12),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 12),
                     ),
                   ),
                 ),
               ),
               const SizedBox(width: 12),
               GestureDetector(
+                onTap: () => Navigator.pushNamed(context, CommunityFeedScreen.routeName),
+                child: CircleAvatar(
+                  backgroundColor: Colors.white.withValues(alpha: 0.2),
+                  child: const Icon(Icons.people_alt_rounded, color: Colors.white),
+                ),
+              ),
+              const SizedBox(width: 12),
+              GestureDetector(
                 onTap: () => Navigator.pushNamed(context, NotificationsScreen.routeName),
                 child: CircleAvatar(
-                  backgroundColor: Colors.white.withOpacity(0.2),
+                  backgroundColor: Colors.white.withValues(alpha: 0.2),
                   child: const Icon(Icons.notifications_none_rounded, color: Colors.white),
                 ),
               ),
@@ -149,6 +169,8 @@ class _HomeScreenState extends State<HomeScreen> {
             const TopCategories(),
             const SizedBox(height: 10),
             const CarouselImage(),
+            const SizedBox(height: 20),
+            const HubPreview(),
             const SizedBox(height: 10),
             if (recentlyViewedProducts.isNotEmpty)
               ProductShowcase(
@@ -183,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
         borderRadius: BorderRadius.circular(32),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF6366F1).withOpacity(0.3),
+            color: const Color(0xFF6366F1).withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -219,6 +241,32 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const Icon(Icons.auto_awesome_rounded, color: Colors.white, size: 80),
         ],
+      ),
+    );
+  }
+            gradient: const LinearGradient(
+              colors: [Colors.black54, Colors.transparent],
+              begin: Alignment.centerLeft,
+            ),
+          ),
+          padding: const EdgeInsets.all(20),
+          child: const Row(
+            children: [
+              Icon(Icons.shopping_basket_rounded, color: Colors.greenAccent, size: 30),
+              SizedBox(width: 12),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                   Text('MarketHub Fresh', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+                   Text('Groceries delivered in 2 hours', style: TextStyle(color: Colors.white70, fontSize: 12)),
+                ],
+              ),
+              Spacer(),
+              Icon(Icons.arrow_forward_ios_rounded, color: Colors.white, size: 16),
+            ],
+          ),
+        ),
       ),
     );
   }

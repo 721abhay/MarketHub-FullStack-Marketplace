@@ -2,6 +2,19 @@ const express = require("express");
 const productRouter = express.Router();
 const { Product } = require("../models/product");
 
+// Fetch products by category
+productRouter.get("/api/products", async (req, res) => {
+    console.log('📦 Product Fetch Request:', req.query);
+    try {
+        const products = await Product.find({ category: req.query.category });
+        console.log(`✅ Found ${products.length} products for category: ${req.query.category}`);
+        res.json(products);
+    } catch (e) {
+        console.log('❌ Product Fetch Error:', e.message);
+        res.status(500).json({ error: e.message });
+    }
+});
+
 // Search products with sort
 productRouter.get("/api/products/search/:name", async (req, res) => {
     try {
@@ -28,16 +41,6 @@ productRouter.get("/api/products/recommendations/:category", async (req, res) =>
         const products = await Product.find({
             category: req.params.category,
         }).limit(10);
-        res.json(products);
-    } catch (e) {
-        res.status(500).json({ error: e.message });
-    }
-});
-
-// Fetch products by category
-productRouter.get("/api/products", async (req, res) => {
-    try {
-        const products = await Product.find({ category: req.query.category });
         res.json(products);
     } catch (e) {
         res.status(500).json({ error: e.message });

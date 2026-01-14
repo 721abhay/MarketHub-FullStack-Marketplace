@@ -21,7 +21,7 @@ class _AdminSellersScreenState extends State<AdminSellersScreen> {
     fetchUsers();
   }
 
-  fetchUsers() async {
+  Future<void> fetchUsers() async {
     users = await adminServices.fetchAllUsers(context);
     setState(() {});
   }
@@ -79,7 +79,7 @@ class _AdminSellersScreenState extends State<AdminSellersScreen> {
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.02),
+                        color: Colors.black.withValues(alpha: 0.02),
                         blurRadius: 10,
                         offset: const Offset(0, 4),
                       ),
@@ -136,7 +136,7 @@ class _AdminSellersScreenState extends State<AdminSellersScreen> {
                         ),
                       ),
                       Switch(
-                        activeColor: const Color(0xFF10B981),
+                        activeThumbColor: const Color(0xFF10B981),
                         value: isVerified,
                         onChanged: (val) => verifySeller(seller.id, val),
                       ),

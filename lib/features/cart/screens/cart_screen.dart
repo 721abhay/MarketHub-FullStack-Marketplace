@@ -1,7 +1,6 @@
 import 'package:amazon_clone/common/widgets/custom_button.dart';
 import 'package:amazon_clone/constants/global_variables.dart';
 import 'package:amazon_clone/features/address/screens/address_screen.dart';
-import 'package:amazon_clone/features/product_details/screens/product_details_screen.dart';
 import 'package:amazon_clone/models/product.dart';
 import 'package:amazon_clone/providers/user_provider.dart';
 import 'package:flutter/material.dart';
@@ -134,7 +133,7 @@ class _CartScreenState extends State<CartScreen> {
                       borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
+                          color: Colors.black.withValues(alpha: 0.05),
                           blurRadius: 20,
                           offset: const Offset(0, -5),
                         ),

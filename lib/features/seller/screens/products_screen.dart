@@ -23,7 +23,7 @@ class _SellerProductsScreenState extends State<SellerProductsScreen> {
     fetchAllProducts();
   }
 
-  fetchAllProducts() async {
+  Future<void> fetchAllProducts() async {
     products = await sellerServices.fetchSellerProducts(context);
     setState(() {});
   }
@@ -82,7 +82,7 @@ class _SellerProductsScreenState extends State<SellerProductsScreen> {
                               borderRadius: BorderRadius.circular(20),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.05),
+                                  color: Colors.black.withValues(alpha: 0.05),
                                   blurRadius: 10,
                                   offset: const Offset(0, 4),
                                 ),

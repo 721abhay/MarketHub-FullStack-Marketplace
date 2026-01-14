@@ -38,7 +38,7 @@ class _WalletScreenState extends State<WalletScreen> {
         }),
       );
 
-      if (!context.mounted) return;
+      if (!mounted) return;
       httpErrorHandle(
         response: res,
         context: context,
@@ -49,6 +49,7 @@ class _WalletScreenState extends State<WalletScreen> {
         },
       );
     } catch (e) {
+      if (!mounted) return;
       showSnackBar(context, e.toString());
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -105,7 +106,7 @@ class _WalletScreenState extends State<WalletScreen> {
         borderRadius: BorderRadius.circular(32),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF6366F1).withOpacity(0.3),
+            color: const Color(0xFF6366F1).withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),

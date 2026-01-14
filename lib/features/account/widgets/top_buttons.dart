@@ -41,7 +41,9 @@ class TopButtons extends StatelessWidget {
             ),
             AccountButton(
               text: 'Your Wish List',
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, '/wishlist');
+              },
             ),
           ],
         ),

@@ -53,7 +53,7 @@ class _DealOfDayState extends State<DealOfDay> {
           border: Border.all(color: const Color(0xFFF1F5F9)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 20,
               offset: const Offset(0, 10),
             ),

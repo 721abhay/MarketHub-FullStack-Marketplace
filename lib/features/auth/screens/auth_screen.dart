@@ -73,7 +73,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF6366F1).withOpacity(0.3),
+                        color: const Color(0xFF6366F1).withValues(alpha: 0.3),
                         blurRadius: 20,
                         offset: const Offset(0, 10),
                       ),
@@ -124,7 +124,7 @@ class _AuthScreenState extends State<AuthScreen> {
                               boxShadow: _auth == Auth.signup
                                   ? [
                                       BoxShadow(
-                                        color: Colors.black.withOpacity(0.05),
+                                        color: Colors.black.withValues(alpha: 0.05),
                                         blurRadius: 10,
                                         offset: const Offset(0, 4),
                                       )
@@ -152,7 +152,7 @@ class _AuthScreenState extends State<AuthScreen> {
                               boxShadow: _auth == Auth.signin
                                   ? [
                                       BoxShadow(
-                                        color: Colors.black.withOpacity(0.05),
+                                        color: Colors.black.withValues(alpha: 0.05),
                                         blurRadius: 10,
                                         offset: const Offset(0, 4),
                                       )

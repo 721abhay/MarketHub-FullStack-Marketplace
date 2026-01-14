@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const userRouter = express.Router();
 const auth = require("../middlewares/auth");
 const Order = require("../models/order");
@@ -19,26 +20,35 @@ userRouter.post("/api/save-user-address", auth, async (req, res) => {
     }
 });
 
-// Order Product
+// Order Product (Transactional)
 userRouter.post("/api/order", auth, async (req, res) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
     try {
         const { cart, totalPrice, address } = req.body;
         let products = [];
 
         for (let i = 0; i < cart.length; i++) {
-            let product = await Product.findById(cart[i].product._id);
+            // Find product and lock it (if compatible DB)
+            // Using findOneAndUpdate for atomic check is safer, but inside transaction is standard
+            let product = await Product.findOne({ _id: cart[i].product._id }).session(session);
+
+            if (!product) {
+                throw new Error(`Product not found!`);
+            }
+
             if (product.quantity >= cart[i].quantity) {
                 product.quantity -= cart[i].quantity;
                 products.push({ product, quantity: cart[i].quantity, sellerId: product.sellerId });
-                await product.save();
+                await product.save({ session });
             } else {
-                return res.status(400).json({ msg: `${product.name} is out of stock!` });
+                throw new Error(`${product.name} is out of stock!`); // Will trigger abort
             }
         }
 
-        let user = await User.findById(req.user);
+        let user = await User.findById(req.user).session(session);
         user.cart = [];
-        user = await user.save();
+        await user.save({ session });
 
         let order = new Order({
             products,
@@ -47,10 +57,16 @@ userRouter.post("/api/order", auth, async (req, res) => {
             userId: req.user,
             orderedAt: new Date().getTime(),
         });
-        order = await order.save();
+        order = await order.save({ session });
+
+        await session.commitTransaction();
+        session.endSession();
+
         res.json(order);
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        await session.abortTransaction();
+        session.endSession();
+        res.status(400).json({ error: e.message }); // 400 for logic errors
     }
 });
 
@@ -131,11 +147,16 @@ userRouter.post("/api/recently-viewed", auth, async (req, res) => {
     try {
         const { id } = req.body;
         const product = await Product.findById(id);
+
+        if (!product) {
+            return res.status(404).json({ msg: "Product not found!" });
+        }
+
         let user = await User.findById(req.user);
 
         // Remove if already exists to move it to the front
         user.recentlyViewed = user.recentlyViewed.filter(
-            (item) => item.product._id.toString() !== id
+            (item) => item.product && item.product._id.toString() !== id
         );
 
         user.recentlyViewed.unshift({ product, viewedAt: new Date().getTime() });
@@ -157,10 +178,15 @@ userRouter.post("/api/wishlist", auth, async (req, res) => {
     try {
         const { id } = req.body;
         const product = await Product.findById(id);
+
+        if (!product) {
+            return res.status(404).json({ msg: "Product not found!" });
+        }
+
         let user = await User.findById(req.user);
 
         const isFound = user.wishlist.some(
-            (item) => item.product._id.toString() === id
+            (item) => item.product && item.product._id.toString() === id
         );
 
         if (isFound) {
