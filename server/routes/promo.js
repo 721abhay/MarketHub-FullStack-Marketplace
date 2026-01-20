@@ -2,6 +2,7 @@ const express = require("express");
 const promoRouter = express.Router();
 const auth = require("../middlewares/auth");
 const PromoCode = require("../models/promo_code");
+const sendResponse = require("../utils/responseHelper");
 
 promoRouter.post("/api/promo/validate", auth, async (req, res) => {
     try {
@@ -9,11 +10,11 @@ promoRouter.post("/api/promo/validate", auth, async (req, res) => {
         const promo = await PromoCode.findOne({ code, isActive: true });
 
         if (!promo) {
-            return res.status(400).json({ msg: "Invalid or expired promo code!" });
+            return sendResponse(res, 400, false, "Invalid or expired promo code!");
         }
 
         if (promo.expiryDate < new Date().getTime()) {
-            return res.status(400).json({ msg: "This promo code has expired!" });
+            return sendResponse(res, 400, false, "This promo code has expired!");
         }
 
         res.json(promo);

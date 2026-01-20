@@ -79,7 +79,7 @@ class MobileHomeScreen extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
-            BoxShadow(color: const Color(0xFF6366F1).withValues(alpha: 0.3), blurRadius: 20, offset: const Offset(0, 10)),
+            BoxShadow(color: Color(0xFF6366F1).withValues(alpha: 0.3), blurRadius: 20, offset: const Offset(0, 10)),
           ],
         ),
         child: Stack(

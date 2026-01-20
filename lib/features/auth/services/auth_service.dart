@@ -83,8 +83,13 @@ class AuthService {
         onSuccess: () async {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           if (!context.mounted) return;
-          Provider.of<UserProvider>(context, listen: false).setUser(res.body);
-          await prefs.setString('x-auth-token', jsonDecode(res.body)['token']);
+          
+          final responseBody = jsonDecode(res.body);
+          final userData = responseBody['data'];
+          
+          Provider.of<UserProvider>(context, listen: false).setUser(jsonEncode(userData));
+          await prefs.setString('x-auth-token', userData['token']);
+          
           if (!context.mounted) return;
           Navigator.pushNamedAndRemoveUntil(
             context,
@@ -98,23 +103,23 @@ class AuthService {
     }
   }
 
-  // get user data
-  void getUserData(
+  Future<void> getUserData(
     BuildContext context,
   ) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('x-auth-token');
 
-      if (token == null) {
+      if (token == null || token.isEmpty) {
         prefs.setString('x-auth-token', '');
+        return;
       }
 
       var tokenRes = await http.post(
         Uri.parse('${GlobalVariables.uri}/tokenIsValid'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': token!
+          'x-auth-token': token
         },
       );
 
@@ -130,8 +135,11 @@ class AuthService {
         );
 
         if (!context.mounted) return;
+        final responseBody = jsonDecode(userRes.body);
+        final userData = responseBody['data'];
+        
         var userProvider = Provider.of<UserProvider>(context, listen: false);
-        userProvider.setUser(userRes.body);
+        userProvider.setUser(jsonEncode(userData));
       }
     } catch (e) {
       // showSnackBar(context, e.toString());

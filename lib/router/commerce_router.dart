@@ -10,6 +10,8 @@ import 'package:markethub/features/product_details/screens/product_details_scree
 import 'package:markethub/features/search/screens/search_screen.dart';
 import 'package:markethub/features/search/screens/visual_search_screen.dart';
 import 'package:markethub/features/shopping_list/screens/shopping_list_screen.dart';
+import 'package:markethub/features/address/screens/address_screen.dart';
+import 'package:markethub/features/cart/screens/order_success_screen.dart';
 import 'package:markethub/models/product.dart';
 import 'package:flutter/material.dart';
 
@@ -46,6 +48,13 @@ class CommerceRouter {
         return MaterialPageRoute(
           builder: (_) => BuyingGuideScreen(category: category),
         );
+      case AddressScreen.routeName:
+        var totalAmount = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => AddressScreen(totalAmount: totalAmount),
+        );
+      case OrderSuccessScreen.routeName:
+        return MaterialPageRoute(builder: (_) => const OrderSuccessScreen());
       default:
         return null;
     }

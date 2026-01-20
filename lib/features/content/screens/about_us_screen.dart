@@ -108,7 +108,7 @@ class AboutUsScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: const Color(0xFF6366F1).withValues(alpha: 0.1),
+              color: Color(0xFF6366F1).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(icon, color: const Color(0xFF6366F1), size: 24),

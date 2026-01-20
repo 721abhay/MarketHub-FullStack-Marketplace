@@ -29,12 +29,12 @@ class HomeServices {
         response: res,
         context: context,
         onSuccess: () {
-          for (int i = 0; i < jsonDecode(res.body).length; i++) {
+          final responseBody = jsonDecode(res.body);
+          final List<dynamic> data = responseBody['data'];
+          for (int i = 0; i < data.length; i++) {
             productList.add(
               Product.fromJson(
-                jsonEncode(
-                  jsonDecode(res.body)[i],
-                ),
+                jsonEncode(data[i]),
               ),
             );
           }
@@ -65,8 +65,9 @@ class HomeServices {
         response: res,
         context: context,
         onSuccess: () {
-          if (res.body != 'null' && res.body.isNotEmpty) {
-            product = Product.fromJson(res.body);
+          final responseBody = jsonDecode(res.body);
+          if (responseBody['data'] != null) {
+            product = Product.fromJson(jsonEncode(responseBody['data']));
           }
         },
       );

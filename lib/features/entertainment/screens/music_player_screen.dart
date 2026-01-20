@@ -7,7 +7,7 @@ class MusicPlayerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1DB954).withValues(alpha: 0.05), // Subtle green tint
+      backgroundColor: Color(0xFF1DB954).withValues(alpha: 0.05), // Subtle green tint
       appBar: AppBar(title: const Text('Music Player'), backgroundColor: Colors.transparent, elevation: 0),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 40),

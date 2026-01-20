@@ -4,6 +4,7 @@ import 'package:markethub/features/hub/screens/qr_scanner_screen.dart';
 import 'package:markethub/features/hub/screens/universal_ai_search_screen.dart';
 import 'package:markethub/features/hub/screens/rewards_catalog_screen.dart';
 import 'package:markethub/features/hub/screens/partner_program_screen.dart';
+import 'package:markethub/features/hub/screens/user_insights_screen.dart';
 import 'package:flutter/material.dart';
 
 class HubRouter {
@@ -21,6 +22,8 @@ class HubRouter {
         return MaterialPageRoute(builder: (_) => const RewardsCatalogScreen());
       case PartnerProgramScreen.routeName:
         return MaterialPageRoute(builder: (_) => const PartnerProgramScreen());
+      case UserActivityInsightsScreen.routeName:
+        return MaterialPageRoute(builder: (_) => const UserActivityInsightsScreen());
       default:
         return null;
     }

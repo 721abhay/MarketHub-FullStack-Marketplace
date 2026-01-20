@@ -34,7 +34,7 @@ class FreshOrderDetailsScreen extends StatelessWidget {
   Widget _buildStatusCard() {
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), border: Border.all(color: const Color(0xFF16A34A).withValues(alpha: 0.2))),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), border: Border.all(color: Color(0xFF16A34A).withValues(alpha: 0.2))),
       child: Row(
         children: [
           const Icon(Icons.check_circle, color: Color(0xFF16A34A), size: 40),

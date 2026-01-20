@@ -12,6 +12,8 @@ const userRouter = require('./routes/user');
 const aiRouter = require('./routes/ai');
 const promoRouter = require('./routes/promo');
 const serviceRouter = require('./routes/service');
+const hubRouter = require('./routes/hub');
+const storageRouter = require('./routes/storage');
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -46,6 +48,8 @@ app.use(userRouter);
 app.use(aiRouter);
 app.use(promoRouter);
 app.use(serviceRouter);
+app.use(hubRouter);
+app.use(storageRouter);
 
 // Test route
 app.get('/', (req, res) => {
@@ -57,17 +61,25 @@ console.log('Attempting to connect to MongoDB...');
 console.log('DB URL:', process.env.DB ? 'Connection string found' : 'NO CONNECTION STRING!');
 
 mongoose
-  .connect(process.env.DB)
+  .connect(process.env.DB, {
+    retryWrites: false, // Recommended for Cosmos DB
+  })
   .then(() => {
-    console.log("✅ MongoDB Connection Successful");
+    console.log("✅ Azure Cosmos DB / MongoDB Connection Successful");
   })
   .catch((e) => {
-    console.log("❌ MongoDB Connection Error:");
-    console.log(e.message);
-    console.log('\nNote: Sign-in will not work without a valid MongoDB connection.');
-    console.log('Please add your MongoDB connection string to server/.env file');
+    console.error("❌ Database Connection Error:", e.message);
   });
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server running at http://192.168.0.103:${PORT}`);
+});
+
+// Global Error Handler
+app.use((err, req, res, next) => {
+  logger.error(`${err.status || 500} - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || 'Internal Server Error',
+  });
 });

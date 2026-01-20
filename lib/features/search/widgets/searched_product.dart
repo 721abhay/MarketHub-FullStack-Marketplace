@@ -1,8 +1,10 @@
+import 'package:markethub/common/widgets/shimmer_loader.dart';
 import 'package:markethub/models/product.dart';
 import 'package:markethub/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class SearchedProduct extends StatelessWidget {
   final Product product;
@@ -58,9 +60,10 @@ class SearchedProduct extends StatelessWidget {
                     tag: product.id ?? UniqueKey().toString(),
                     child: Opacity(
                       opacity: isOutOfStock ? 0.5 : 1.0,
-                      child: Image.network(
-                        product.images[0],
+                      child: CachedNetworkImage(
+                        imageUrl: product.images[0],
                         fit: BoxFit.contain,
+                        placeholder: (context, url) => const ShimmerLoader(width: double.infinity, height: double.infinity),
                       ),
                     ),
                   ),

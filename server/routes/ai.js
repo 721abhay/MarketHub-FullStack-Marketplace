@@ -1,31 +1,44 @@
-const express = require("express");
+const express = require('express');
 const aiRouter = express.Router();
-const auth = require("../middlewares/auth");
+const multer = require('multer');
+const { analyzeImage } = require('../utils/azure_vision');
+const sendResponse = require('../utils/responseHelper');
+const Product = require('../models/product');
 
-aiRouter.post("/api/ai/chat", auth, async (req, res) => {
+const upload = multer({ storage: multer.memoryStorage() });
+
+// Visual Search Endpoint
+aiRouter.post('/api/ai/visual-search', upload.single('image'), async (req, res) => {
     try {
-        const { message } = req.body;
-        let response = "";
-
-        const query = message.toLowerCase();
-
-        if (query.includes("order")) {
-            response = "I can definitely help with that! You can check your latest order status in the 'Your Orders' section of your profile.";
-        } else if (query.includes("shipping") || query.includes("deliver")) {
-            response = "MarketHub offers SuperFast delivery! Most orders arrive within 2-3 business days. You'll get a notification as soon as your items ship.";
-        } else if (query.includes("return") || query.includes("refund")) {
-            response = "We have a hassle-free 7-day return policy. Just go to your order details and select 'Return Item' if you're not satisfied.";
-        } else if (query.includes("price") || query.includes("discount")) {
-            response = "We always have the best deals! Check out the 'Featured Flash Deals' on the home page for up to 40% off.";
-        } else if (query.includes("who are you") || query.includes("help")) {
-            response = "I am the MarketHub AI Concierge. I'm here to help you find products, track orders, and answer any questions about our marketplace!";
-        } else {
-            response = "That's a great question! While I'm still learning, I recommend searching for that using the search bar at the top of the home screen for the best results.";
+        if (!req.file) {
+            return sendResponse(res, 400, false, "No image uploaded");
         }
 
-        res.json({ response });
-    } catch (e) {
-        res.status(500).json({ error: e.message });
+        // 1. Analyze image via Azure AI
+        const analysis = await analyzeImage(req.file.buffer);
+
+        // 2. Extract keywords (tags or description)
+        const keywords = analysis.tags ? analysis.tags.slice(0, 3).map(t => t.name) : [];
+        const description = analysis.description?.captions?.[0]?.text || "";
+
+        // 3. Search database for matching products
+        // Simple search logic: match keywords in name or description
+        let query = keywords.length > 0 ? {
+            $or: [
+                { name: { $regex: keywords[0], $options: 'i' } },
+                { description: { $regex: keywords[0], $options: 'i' } }
+            ]
+        } : { name: { $regex: description, $options: 'i' } };
+
+        const products = await Product.find(query).limit(10);
+
+        return sendResponse(res, 200, true, "Visual search complete", {
+            analysis,
+            products
+        });
+
+    } catch (error) {
+        return sendResponse(res, 500, false, error.message);
     }
 });
 

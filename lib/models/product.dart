@@ -51,6 +51,20 @@ class Product {
     this.sellerId,
   });
 
+  // UI Helpers for Response Rendering
+  double get averageRating {
+    if (rating == null || rating!.isEmpty) return 0.0;
+    double total = 0;
+    for (var r in rating!) {
+      total += r.rating;
+    }
+    return total / rating!.length;
+  }
+
+  bool get isInStock => quantity > 0;
+  bool get isLowStock => quantity > 0 && quantity < 5;
+  String get formattedPrice => '\$${price.toStringAsFixed(2)}';
+
   Map<String, dynamic> toMap() {
     return {
       'name': name,

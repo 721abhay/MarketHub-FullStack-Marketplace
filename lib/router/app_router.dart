@@ -1,5 +1,8 @@
 import 'package:markethub/common/widgets/bottom_bar.dart';
 import 'package:markethub/features/auth/screens/auth_screen.dart';
+import 'package:markethub/features/auth/screens/forgot_password_screen.dart';
+import 'package:markethub/features/auth/screens/otp_verification_screen.dart';
+import 'package:markethub/features/auth/screens/splash_screen.dart';
 import 'package:markethub/router/account_router.dart';
 import 'package:markethub/router/commerce_router.dart';
 import 'package:markethub/router/events_router.dart';
@@ -13,6 +16,12 @@ import 'package:markethub/router/services_router.dart';
 import 'package:markethub/router/social_router.dart';
 import 'package:markethub/router/travel_router.dart';
 import 'package:markethub/router/wellness_router.dart';
+import 'package:markethub/router/iot_router.dart';
+import 'package:markethub/router/learning_router.dart';
+import 'package:markethub/router/gamification_router.dart';
+import 'package:markethub/router/luxury_router.dart';
+import 'package:markethub/router/corporate_router.dart';
+import 'package:markethub/router/charity_router.dart';
 import 'package:flutter/material.dart';
 
 class AppRouter {
@@ -57,10 +66,34 @@ class AppRouter {
     final wellnessRoute = WellnessRouter.generateRoute(settings);
     if (wellnessRoute != null) return wellnessRoute;
 
+    final iotRoute = IotRouter.generateRoute(settings);
+    if (iotRoute != null) return iotRoute;
+
+    final learningRoute = LearningRouter.generateRoute(settings);
+    if (learningRoute != null) return learningRoute;
+
+    final gamificationRoute = GamificationRouter.generateRoute(settings);
+    if (gamificationRoute != null) return gamificationRoute;
+
+    final luxuryRoute = LuxuryRouter.generateRoute(settings);
+    if (luxuryRoute != null) return luxuryRoute;
+
+    final corporateRoute = CorporateRouter.generateRoute(settings);
+    if (corporateRoute != null) return corporateRoute;
+
+    final charityRoute = CharityRouter.generateRoute(settings);
+    if (charityRoute != null) return charityRoute;
+
     // Direct root cases
     switch (settings.name) {
+      case SplashScreen.routeName:
+        return MaterialPageRoute(builder: (_) => const SplashScreen());
       case AuthScreen.routeName:
         return MaterialPageRoute(builder: (_) => const AuthScreen());
+      case ForgotPasswordScreen.routeName:
+        return MaterialPageRoute(builder: (_) => const ForgotPasswordScreen());
+      case OTPVerificationScreen.routeName:
+        return MaterialPageRoute(builder: (_) => const OTPVerificationScreen());
       case BottomBar.routeName:
         return MaterialPageRoute(builder: (_) => const BottomBar());
       default:

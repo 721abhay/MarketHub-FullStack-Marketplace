@@ -1,8 +1,9 @@
-import 'package:markethub/common/widgets/loader.dart';
+import 'package:markethub/common/widgets/shimmer_loader.dart';
 import 'package:markethub/features/home/services/home_services.dart';
 import 'package:markethub/features/product_details/screens/product_details_screen.dart';
 import 'package:markethub/models/product.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class DealOfDay extends StatefulWidget {
   const DealOfDay({super.key});
@@ -39,7 +40,23 @@ class _DealOfDayState extends State<DealOfDay> {
   @override
   Widget build(BuildContext context) {
     if (product == null) {
-      return const SizedBox(height: 200, child: Loader());
+      return Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(32),
+        ),
+        child: const Column(
+          children: [
+            ShimmerLoader(width: 150, height: 20),
+            SizedBox(height: 24),
+            ShimmerLoader(width: double.infinity, height: 200, borderRadius: 20),
+            SizedBox(height: 24),
+            ShimmerLoader(width: 100, height: 30),
+          ],
+        ),
+      );
     }
 
     return GestureDetector(
@@ -85,11 +102,12 @@ class _DealOfDayState extends State<DealOfDay> {
             const SizedBox(height: 24),
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.network(
-                product!.images[0],
+              child: CachedNetworkImage(
+                imageUrl: product!.images[0],
                 height: 250,
                 width: double.infinity,
                 fit: BoxFit.contain,
+                placeholder: (context, url) => const ShimmerLoader(width: double.infinity, height: 250),
               ),
             ),
             const SizedBox(height: 24),

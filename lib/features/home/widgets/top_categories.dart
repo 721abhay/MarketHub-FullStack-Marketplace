@@ -75,7 +75,7 @@ class TopCategories extends StatelessWidget {
                       border: Border.all(color: const Color(0xFFF1F5F9), width: 1.5),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFF6366F1).withValues(alpha: 0.08),
+                          color: Color(0xFF6366F1).withValues(alpha: 0.08),
                           blurRadius: 15,
                           offset: const Offset(0, 8),
                         ),

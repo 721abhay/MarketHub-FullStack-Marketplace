@@ -80,13 +80,11 @@ class SellerServices {
         response: res,
         context: context,
         onSuccess: () {
-          for (int i = 0; i < jsonDecode(res.body).length; i++) {
+          final responseData = jsonDecode(res.body);
+          final List<dynamic> data = responseData['data'];
+          for (int i = 0; i < data.length; i++) {
             productList.add(
-              Product.fromJson(
-                jsonEncode(
-                  jsonDecode(res.body)[i],
-                ),
-              ),
+              Product.fromMap(data[i]),
             );
           }
         },
@@ -149,13 +147,11 @@ class SellerServices {
         response: res,
         context: context,
         onSuccess: () {
-          for (int i = 0; i < jsonDecode(res.body).length; i++) {
+          final responseData = jsonDecode(res.body);
+          final List<dynamic> data = responseData['data'];
+          for (int i = 0; i < data.length; i++) {
             orderList.add(
-              Order.fromJson(
-                jsonEncode(
-                  jsonDecode(res.body)[i],
-                ),
-              ),
+              Order.fromMap(data[i]),
             );
           }
         },
@@ -192,7 +188,9 @@ class SellerServices {
         response: res,
         context: context,
         onSuccess: () {
-          userProvider.setUser(res.body);
+          final responseBody = jsonDecode(res.body);
+          final userData = responseBody['data'];
+          userProvider.setUser(jsonEncode(userData));
           onSuccess();
         },
       );
@@ -220,7 +218,8 @@ class SellerServices {
         response: res,
         context: context,
         onSuccess: () {
-          payouts = jsonDecode(res.body);
+          final responseBody = jsonDecode(res.body);
+          payouts = responseBody['data'];
         },
       );
     } catch (e) {
@@ -246,7 +245,8 @@ class SellerServices {
         response: res,
         context: context,
         onSuccess: () {
-          analytics = jsonDecode(res.body);
+          final responseBody = jsonDecode(res.body);
+          analytics = responseBody['data'];
         },
       );
     } catch (e) {

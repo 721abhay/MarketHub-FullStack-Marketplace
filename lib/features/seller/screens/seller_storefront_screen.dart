@@ -7,16 +7,19 @@ class SellerStorefrontScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
-      body: CustomScrollView(
-        slivers: [
-          _buildAppBar(),
-          _buildSellerHeader(),
-          _buildTabs(),
-          _buildProductGrid(),
-          const SliverToBoxAdapter(child: SizedBox(height: 100)),
-        ],
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        backgroundColor: const Color(0xFFF8FAFC),
+        body: CustomScrollView(
+          slivers: [
+            _buildAppBar(),
+            _buildSellerHeader(),
+            _buildTabs(),
+            _buildProductGrid(),
+            const SliverToBoxAdapter(child: SizedBox(height: 100)),
+          ],
+        ),
       ),
     );
   }

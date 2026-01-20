@@ -1,4 +1,7 @@
 import 'package:markethub/features/account/screens/account_screen.dart';
+import 'package:markethub/features/account/screens/addresses_screen.dart';
+import 'package:markethub/features/account/screens/quiz_screen.dart';
+import 'package:markethub/features/account/screens/gift_cards_screen.dart';
 import 'package:markethub/features/account/screens/notifications_screen.dart';
 import 'package:markethub/features/account/screens/privacy_dashboard_screen.dart';
 import 'package:markethub/features/account/screens/verification_center_screen.dart';
@@ -62,6 +65,12 @@ class AccountRouter {
         return MaterialPageRoute(builder: (_) => const PrivacyPolicyScreen());
       case TermsConditionsScreen.routeName:
         return MaterialPageRoute(builder: (_) => const TermsConditionsScreen());
+      case AddressesScreen.routeName:
+        return MaterialPageRoute(builder: (_) => const AddressesScreen());
+      case DailyQuizScreen.routeName:
+        return MaterialPageRoute(builder: (_) => const DailyQuizScreen());
+      case GiftCardsScreen.routeName:
+        return MaterialPageRoute(builder: (_) => const GiftCardsScreen());
       default:
         return null;
     }

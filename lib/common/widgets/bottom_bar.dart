@@ -73,7 +73,7 @@ class _BottomBarState extends State<BottomBar> {
           borderRadius: BorderRadius.circular(30),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF6366F1).withValues(alpha: 0.15),
+              color: Color(0xFF6366F1).withValues(alpha: 0.15),
               blurRadius: 30,
               offset: const Offset(0, 10),
             ),

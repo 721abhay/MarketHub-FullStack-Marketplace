@@ -28,7 +28,7 @@ class GlobalVariables {
     border: Border.all(color: Colors.white, width: 1.5),
     boxShadow: [
       BoxShadow(
-        color: const Color(0xFF6366F1).withValues(alpha: 0.1),
+        color: Color(0xFF6366F1).withValues(alpha: 0.1),
         blurRadius: 30,
         offset: const Offset(0, 10),
       ),

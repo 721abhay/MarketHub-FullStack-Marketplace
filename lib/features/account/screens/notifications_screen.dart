@@ -107,7 +107,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: notification.isRead ? const Color(0xFFE2E8F0) : const Color(0xFF6366F1).withValues(alpha: 0.3),
+              color: notification.isRead ? Color(0xFFE2E8F0) : const Color(0xFF6366F1).withValues(alpha: 0.3),
               width: notification.isRead ? 1 : 2,
             ),
           ),

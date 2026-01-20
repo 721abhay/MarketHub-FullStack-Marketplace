@@ -5,10 +5,28 @@ const admin = require("../middlewares/admin");
 const User = require("../models/user");
 const Order = require("../models/order");
 
+// Helper for standardized responses
+const sendResponse = (res, status, success, message, data = null) => {
+    return res.status(status).json({
+        success,
+        message,
+        data,
+    });
+};
+
 // Add Product
 adminRouter.post("/admin/add-product", admin, async (req, res) => {
     try {
         const { name, description, images, quantity, price, category, sellerId } = req.body;
+
+        // Validation
+        if (!name || name.trim().length < 3) return sendResponse(res, 400, false, "Valid product name is required (min 3 chars).");
+        if (!description || description.trim().length < 10) return sendResponse(res, 400, false, "Detailed description is required (min 10 chars).");
+        if (!images || images.length === 0) return sendResponse(res, 400, false, "At least one product image is required.");
+        if (price <= 0) return sendResponse(res, 400, false, "Price must be greater than zero.");
+        if (quantity < 0) return sendResponse(res, 400, false, "Quantity cannot be negative.");
+        if (!category) return sendResponse(res, 400, false, "Product category is required.");
+
         let product = new Product({
             name,
             description,
@@ -19,19 +37,19 @@ adminRouter.post("/admin/add-product", admin, async (req, res) => {
             sellerId: sellerId || req.user,
         });
         product = await product.save();
-        res.json(product);
+        return sendResponse(res, 201, true, "Product added successfully!", product);
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        return sendResponse(res, 500, false, e.message);
     }
 });
 
-// Get all products for moderation
+// Get all products
 adminRouter.get("/admin/get-products", admin, async (req, res) => {
     try {
         const products = await Product.find({});
-        res.json(products);
+        return sendResponse(res, 200, true, "Products fetched", products);
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        return sendResponse(res, 500, false, e.message);
     }
 });
 
@@ -39,49 +57,51 @@ adminRouter.get("/admin/get-products", admin, async (req, res) => {
 adminRouter.get("/admin/get-users", admin, async (req, res) => {
     try {
         const users = await User.find({});
-        res.json(users);
+        return sendResponse(res, 200, true, "Users fetched", users);
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        return sendResponse(res, 500, false, e.message);
     }
 });
 
-// Update Seller Verification Status
+// Update Seller Verification
 adminRouter.post("/admin/verify-seller", admin, async (req, res) => {
     try {
         const { id, isVerified } = req.body;
         let user = await User.findById(id);
-        if (user && user.sellerDetails) {
+        if (!user) return sendResponse(res, 404, false, "User not found.");
+
+        if (user.sellerDetails) {
             user.sellerDetails.isVerified = isVerified;
             user = await user.save();
+        } else {
+            return sendResponse(res, 400, false, "User is not registered as a seller.");
         }
-        res.json(user);
+        return sendResponse(res, 200, true, `Seller ${isVerified ? 'verified' : 'unverified'}`, user);
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        return sendResponse(res, 500, false, e.message);
     }
 });
 
-// Get Platform Analytics
+// Analytics
 adminRouter.get("/admin/analytics", admin, async (req, res) => {
     try {
         const orders = await Order.find({});
         const users = await User.find({});
         const products = await Product.find({});
 
-        let totalGMV = 0;
-        orders.forEach(order => {
-            totalGMV += order.totalPrice;
-        });
+        let totalGMV = orders.reduce((sum, order) => sum + order.totalPrice, 0);
 
-        res.json({
+        const analytics = {
             totalGMV,
             totalOrders: orders.length,
             totalUsers: users.length,
             totalProducts: products.length,
-            sellers: users.filter(u => u.type === 'seller').length,
-            buyers: users.filter(u => u.type === 'user').length,
-        });
+            sellersCount: users.filter(u => u.type === 'seller').length,
+            buyersCount: users.filter(u => u.type === 'user').length,
+        };
+        return sendResponse(res, 200, true, "Analytics fetched", analytics);
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        return sendResponse(res, 500, false, e.message);
     }
 });
 
@@ -89,10 +109,11 @@ adminRouter.get("/admin/analytics", admin, async (req, res) => {
 adminRouter.post("/admin/delete-product", admin, async (req, res) => {
     try {
         const { id } = req.body;
-        let product = await Product.findByIdAndDelete(id);
-        res.json(product);
+        const product = await Product.findByIdAndDelete(id);
+        if (!product) return sendResponse(res, 404, false, "Product not found.");
+        return sendResponse(res, 200, true, "Product deleted", product);
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        return sendResponse(res, 500, false, e.message);
     }
 });
 

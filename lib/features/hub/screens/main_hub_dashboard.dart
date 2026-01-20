@@ -3,6 +3,8 @@ import 'package:markethub/features/hub/screens/plus_subscription_screen.dart';
 import 'package:markethub/features/hub/screens/qr_scanner_screen.dart';
 import 'package:markethub/features/hub/screens/universal_ai_search_screen.dart';
 import 'package:markethub/features/account/screens/wallet_screen.dart';
+import 'package:markethub/features/hub/screens/rewards_catalog_screen.dart';
+import 'package:markethub/features/hub/screens/user_insights_screen.dart';
 import 'package:flutter/material.dart';
 
 class MainHubDashboard extends StatelessWidget {
@@ -24,7 +26,7 @@ class MainHubDashboard extends StatelessWidget {
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: const Color(0xFF6366F1).withValues(alpha: 0.08),
+                color: Color(0xFF6366F1).withValues(alpha: 0.08),
               ),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
@@ -54,10 +56,10 @@ class MainHubDashboard extends StatelessWidget {
                     childAspectRatio: 1.1,
                   ),
                   delegate: SliverChildListDelegate([
-                    _buildHubFeatureCard(context, Icons.generating_tokens_rounded, 'Rewards', '2,450 Points', Colors.amber),
-                    _buildHubFeatureCard(context, Icons.qr_code_scanner_rounded, 'Pay & Scan', 'Merchant Pay', const Color(0xFF0EA5E9)),
-                    _buildHubFeatureCard(context, Icons.auto_graph_rounded, 'Insights', 'Your Activity', const Color(0xFF10B981)),
-                    _buildHubFeatureCard(context, Icons.auto_awesome_rounded, 'AI Concierge', '24/7 Support', const Color(0xFFA855F7)),
+                    _buildHubFeatureCard(context, Icons.generating_tokens_rounded, 'Rewards', '2,450 Points', Colors.amber, () => Navigator.pushNamed(context, RewardsCatalogScreen.routeName)),
+                    _buildHubFeatureCard(context, Icons.qr_code_scanner_rounded, 'Pay & Scan', 'Merchant Pay', const Color(0xFF0EA5E9), () => Navigator.pushNamed(context, QRScannerScreen.routeName)),
+                    _buildHubFeatureCard(context, Icons.auto_graph_rounded, 'Insights', 'Your Activity', const Color(0xFF10B981), () => Navigator.pushNamed(context, UserActivityInsightsScreen.routeName)),
+                    _buildHubFeatureCard(context, Icons.auto_awesome_rounded, 'AI Concierge', '24/7 Support', const Color(0xFFA855F7), () => Navigator.pushNamed(context, UniversalAISearchScreen.routeName)),
                   ]),
                 ),
               ),
@@ -113,7 +115,7 @@ class MainHubDashboard extends StatelessWidget {
             borderRadius: BorderRadius.circular(32),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF6366F1).withValues(alpha: 0.25),
+                color: Color(0xFF6366F1).withValues(alpha: 0.25),
                 blurRadius: 40,
                 offset: const Offset(0, 20),
               ),
@@ -229,6 +231,11 @@ class MainHubDashboard extends StatelessWidget {
             icon: ic['i'] as IconData,
             label: ic['n'] as String,
             color: ic['c'] as Color,
+            onTap: () {
+              if (ic['n'] == 'Pay') {
+                Navigator.pushNamed(context, WalletScreen.routeName);
+              }
+            },
           )).toList(),
         ),
       ),
@@ -408,59 +415,94 @@ class MainHubDashboard extends StatelessWidget {
     );
   }
 
-  Widget _buildHubFeatureCard(BuildContext context, IconData icon, String title, String sub, Color color) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: Colors.white, 
-        borderRadius: BorderRadius.circular(32), 
-        border: Border.all(color: const Color(0xFFF1F5F9)),
-        boxShadow: [
-          BoxShadow(
-            color: color.withValues(alpha: 0.05), 
-            blurRadius: 20, 
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12), 
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.1), 
-              shape: BoxShape.circle,
-            ), 
-            child: Icon(icon, color: color, size: 22),
-          ),
-          const Spacer(),
-          Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, letterSpacing: -0.3)),
-          const SizedBox(height: 2),
-          Text(sub, style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 11)),
-        ],
+  Widget _buildHubFeatureCard(BuildContext context, IconData icon, String title, String sub, Color color, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: Colors.white, 
+          borderRadius: BorderRadius.circular(32), 
+          border: Border.all(color: const Color(0xFFF1F5F9)),
+          boxShadow: [
+            BoxShadow(
+              color: color.withValues(alpha: 0.05), 
+              blurRadius: 20, 
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12), 
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.1), 
+                shape: BoxShape.circle,
+              ), 
+              child: Icon(icon, color: color, size: 22),
+            ),
+            const Spacer(),
+            Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, letterSpacing: -0.3)),
+            const SizedBox(height: 2),
+            Text(sub, style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 11)),
+          ],
+        ),
       ),
     );
   }
 }
 
-class _AppBarButton extends StatelessWidget {
+class _AppBarButton extends StatefulWidget {
   final IconData icon;
   final VoidCallback onTap;
   const _AppBarButton({required this.icon, required this.onTap});
 
   @override
+  State<_AppBarButton> createState() => _AppBarButtonState();
+}
+
+class _AppBarButtonState extends State<_AppBarButton> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: const Interval(0.0, 0.6, curve: Curves.easeOutBack)),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 44,
-        width: 44,
-        decoration: BoxDecoration(
-          color: const Color(0xFFF1F5F9),
-          borderRadius: BorderRadius.circular(14),
+      onTap: () {
+        _controller.forward(from: 0.0); // Play animation on tap
+        widget.onTap();
+      },
+      child: ScaleTransition(
+        scale: _scaleAnimation,
+        child: Container(
+          height: 44,
+          width: 44,
+          decoration: BoxDecoration(
+            color: const Color(0xFFF1F5F9),
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Icon(widget.icon, color: const Color(0xFF0F172A), size: 20),
         ),
-        child: Icon(icon, color: const Color(0xFF0F172A), size: 20),
       ),
     );
   }
@@ -470,26 +512,30 @@ class _ShortcutItem extends StatelessWidget {
   final IconData icon;
   final String label;
   final Color color;
-  const _ShortcutItem({required this.icon, required this.label, required this.color});
+  final VoidCallback onTap;
+  const _ShortcutItem({required this.icon, required this.label, required this.color, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(18), 
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.1), 
-            borderRadius: BorderRadius.circular(20),
-          ), 
-          child: Icon(icon, color: color, size: 24),
-        ),
-        const SizedBox(height: 12),
-        Text(
-          label, 
-          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569)),
-        ),
-      ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(18), 
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.1), 
+              borderRadius: BorderRadius.circular(20),
+            ), 
+            child: Icon(icon, color: color, size: 24),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            label, 
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569)),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -1,32 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:markethub/features/iot/services/iot_services.dart';
+import 'package:markethub/models/service_models.dart';
+import 'package:markethub/common/widgets/loader.dart';
 
-class SmartHomeDashboard extends StatelessWidget {
+class SmartHomeDashboard extends StatefulWidget {
   static const String routeName = '/smart-home';
   const SmartHomeDashboard({super.key});
+
+  @override
+  State<SmartHomeDashboard> createState() => _SmartHomeDashboardState();
+}
+
+class _SmartHomeDashboardState extends State<SmartHomeDashboard> {
+  final IoTServices iotServices = IoTServices();
+  List<IoTDevice>? iotDevices;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchIoTDevices();
+  }
+
+  void fetchIoTDevices() async {
+    iotDevices = await iotServices.fetchIoTDevices(context: context);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF0F172A),
-      appBar: AppBar(title: const Text('Smart Home'), backgroundColor: Colors.transparent, foregroundColor: Colors.white, elevation: 0),
+      appBar: AppBar(
+          title: const Text('Smart Home'),
+          backgroundColor: Colors.transparent,
+          foregroundColor: Colors.white,
+          elevation: 0),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
           children: [
             _buildEnvironmentBanner(),
             const SizedBox(height: 32),
-            _buildDeviceGrid(),
+            iotDevices == null
+                ? const Loader()
+                : _buildDeviceGrid(),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () {}, backgroundColor: Colors.blueAccent, child: const Icon(Icons.add, color: Colors.white)),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          backgroundColor: Colors.blueAccent,
+          child: const Icon(Icons.add, color: Colors.white)),
     );
   }
 
   Widget _buildEnvironmentBanner() {
     return Container(
       padding: const EdgeInsets.all(32),
-      decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.05), borderRadius: BorderRadius.circular(32), border: Border.all(color: Colors.white10)),
+      decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.05),
+          borderRadius: BorderRadius.circular(32),
+          border: Border.all(color: Colors.white10)),
       child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -39,29 +73,60 @@ class SmartHomeDashboard extends StatelessWidget {
   }
 
   Widget _buildDeviceGrid() {
-    final devices = [
-       {'name': 'Living Room Light', 'icon': Icons.lightbulb, 'status': 'ON', 'color': Colors.amber},
-       {'name': 'Air Purifier', 'icon': Icons.air, 'status': 'Active', 'color': Colors.blue},
-       {'name': 'Smart Lock', 'icon': Icons.lock, 'status': 'Locked', 'color': Colors.green},
-       {'name': 'Security Camera', 'icon': Icons.videocam, 'status': 'Live', 'color': Colors.red},
-    ];
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 16, crossAxisSpacing: 16, childAspectRatio: 1.1),
-      itemCount: devices.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 16,
+          crossAxisSpacing: 16,
+          childAspectRatio: 1.1),
+      itemCount: iotDevices!.length,
       itemBuilder: (context, index) {
+        final device = iotDevices![index];
+        IconData deviceIcon = Icons.devices;
+        Color deviceColor = Colors.blueAccent;
+
+        // Simple mapping for demo
+        if (device.name.contains('Light')) {
+          deviceIcon = Icons.lightbulb;
+          deviceColor = Colors.amber;
+        } else if (device.name.contains('Thermostat')) {
+          deviceIcon = Icons.thermostat;
+          deviceColor = Colors.orange;
+        } else if (device.name.contains('Hub')) {
+          deviceIcon = Icons.router;
+          deviceColor = Colors.blue;
+        }
+
         return Container(
           padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.05), borderRadius: BorderRadius.circular(24)),
+          decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.05),
+              borderRadius: BorderRadius.circular(24)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(devices[index]['icon'] as IconData, color: devices[index]['color'] as Color),
+              Icon(deviceIcon, color: deviceColor),
               const Spacer(),
-              Text(devices[index]['name'] as String, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
+              Text(device.name,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13)),
               const SizedBox(height: 4),
-              Text(devices[index]['status'] as String, style: TextStyle(color: (devices[index]['color'] as Color).withValues(alpha: 0.8), fontSize: 11, fontWeight: FontWeight.bold)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(device.status,
+                      style: TextStyle(
+                          color: deviceColor.withValues(alpha: 0.8),
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold)),
+                  Text(device.battery,
+                      style: const TextStyle(color: Colors.grey, fontSize: 10)),
+                ],
+              ),
             ],
           ),
         );
@@ -78,6 +143,14 @@ class _EnvItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [Icon(icon, color: Colors.blueAccent, size: 28), const SizedBox(height: 12), Text(val, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)), Text(label, style: const TextStyle(color: Colors.grey, fontSize: 11))]);
+    return Column(children: [
+      Icon(icon, color: Colors.blueAccent, size: 28),
+      const SizedBox(height: 12),
+      Text(val,
+          style: const TextStyle(
+              color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+      Text(label, style: const TextStyle(color: Colors.grey, fontSize: 11))
+    ]);
   }
 }
+

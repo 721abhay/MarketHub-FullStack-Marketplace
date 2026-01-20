@@ -151,22 +151,28 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 CustomTextField(
                   controller: productNameController,
                   hintText: 'Product Name',
+                  prefixIcon: Icons.shopping_bag_outlined,
                 ),
                 const SizedBox(height: 16),
                 CustomTextField(
                   controller: descriptionController,
                   hintText: 'Description',
+                  prefixIcon: Icons.description_outlined,
                   maxLines: 5,
                 ),
                 const SizedBox(height: 16),
                 CustomTextField(
                   controller: priceController,
                   hintText: 'Price (\$)',
+                  prefixIcon: Icons.attach_money_rounded,
+                  keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 16),
                 CustomTextField(
                   controller: quantityController,
                   hintText: 'Quantity',
+                  prefixIcon: Icons.inventory_2_outlined,
+                  keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 24),
                 const Text(

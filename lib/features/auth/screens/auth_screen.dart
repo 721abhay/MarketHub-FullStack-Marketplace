@@ -1,3 +1,4 @@
+import 'package:markethub/common/widgets/custom_textfield.dart';
 import 'package:markethub/constants/global_variables.dart';
 import 'package:markethub/features/auth/services/auth_service.dart';
 import 'package:flutter/material.dart';
@@ -66,7 +67,7 @@ class _AuthScreenState extends State<AuthScreen> {
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: const Color(0xFF6366F1).withValues(alpha: 0.05),
+                color: Color(0xFF6366F1).withValues(alpha: 0.05),
               ),
             ),
           ),
@@ -88,7 +89,7 @@ class _AuthScreenState extends State<AuthScreen> {
                              borderRadius: BorderRadius.circular(28),
                              boxShadow: [
                                BoxShadow(
-                                 color: const Color(0xFF6366F1).withValues(alpha: 0.3),
+                                 color: Color(0xFF6366F1).withValues(alpha: 0.3),
                                  blurRadius: 30,
                                  offset: const Offset(0, 15),
                                ),
@@ -177,11 +178,36 @@ class _AuthScreenState extends State<AuthScreen> {
                         key: _signUpFormKey,
                         child: Column(
                           children: [
-                            _CustomInput(controller: _nameController, hint: 'Full Name', icon: Icons.person_outline_rounded),
-                            const SizedBox(height: 20),
-                            _CustomInput(controller: _emailController, hint: 'Email Address', icon: Icons.alternate_email_rounded),
-                            const SizedBox(height: 20),
-                            _CustomInput(controller: _passwordController, hint: 'Secure Password', icon: Icons.lock_outline_rounded, isPass: true),
+                             CustomTextField(
+                               controller: _nameController, 
+                               hintText: 'Full Name', 
+                               prefixIcon: Icons.person_outline_rounded,
+                             ),
+                             const SizedBox(height: 20),
+                             CustomTextField(
+                               controller: _emailController, 
+                               hintText: 'Email Address', 
+                               prefixIcon: Icons.alternate_email_rounded,
+                               keyboardType: TextInputType.emailAddress,
+                               validator: (val) {
+                                  if (val == null || val.isEmpty) return 'Enter email';
+                                  if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val)) {
+                                    return 'Enter valid email';
+                                  }
+                                  return null;
+                               },
+                             ),
+                             const SizedBox(height: 20),
+                             CustomTextField(
+                               controller: _passwordController, 
+                               hintText: 'Secure Password', 
+                               prefixIcon: Icons.lock_outline_rounded, 
+                               isPassword: true,
+                               validator: (val) {
+                                  if (val == null || val.length < 6) return 'Password too short (min 6)';
+                                  return null;
+                               },
+                             ),
                             const SizedBox(height: 24),
                             // Seller Mode Toggle
                             _SellerToggle(
@@ -203,9 +229,19 @@ class _AuthScreenState extends State<AuthScreen> {
                         key: _signInFormKey,
                         child: Column(
                           children: [
-                            _CustomInput(controller: _emailController, hint: 'Email Address', icon: Icons.alternate_email_rounded),
-                            const SizedBox(height: 20),
-                            _CustomInput(controller: _passwordController, hint: 'Password', icon: Icons.lock_outline_rounded, isPass: true),
+                             CustomTextField(
+                               controller: _emailController, 
+                               hintText: 'Email Address', 
+                               prefixIcon: Icons.alternate_email_rounded,
+                               keyboardType: TextInputType.emailAddress,
+                             ),
+                             const SizedBox(height: 20),
+                             CustomTextField(
+                               controller: _passwordController, 
+                               hintText: 'Password', 
+                               prefixIcon: Icons.lock_outline_rounded, 
+                               isPassword: true,
+                             ),
                             const SizedBox(height: 16),
                             Align(
                               alignment: Alignment.centerRight,
@@ -281,46 +317,6 @@ class _AuthToggle extends StatelessWidget {
   }
 }
 
-class _CustomInput extends StatelessWidget {
-  final TextEditingController controller;
-  final String hint;
-  final IconData icon;
-  final bool isPass;
-  const _CustomInput({required this.controller, required this.hint, required this.icon, this.isPass = false});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 15,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: TextFormField(
-        controller: controller,
-        obscureText: isPass,
-        decoration: InputDecoration(
-          hintText: hint,
-          prefixIcon: Icon(icon, color: const Color(0xFF6366F1), size: 20),
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          hintStyle: const TextStyle(color: Color(0xFF94A3B8), fontSize: 14),
-        ),
-        validator: (val) {
-          if (val == null || val.isEmpty) return 'Please enter $hint';
-          return null;
-        },
-      ),
-    );
-  }
-}
 
 class _SellerToggle extends StatelessWidget {
   final bool value;
@@ -334,7 +330,7 @@ class _SellerToggle extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: value ? const Color(0xFF6366F1).withValues(alpha: 0.05) : Colors.transparent,
+          color: value ? Color(0xFF6366F1).withValues(alpha: 0.05) : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: value ? const Color(0xFF6366F1) : const Color(0xFFE2E8F0)),
         ),
@@ -386,7 +382,7 @@ class _AuthButton extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF6366F1).withValues(alpha: 0.25),
+            color: Color(0xFF6366F1).withValues(alpha: 0.25),
             blurRadius: 25,
             offset: const Offset(0, 12),
           ),

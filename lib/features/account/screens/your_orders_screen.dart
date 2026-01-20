@@ -1,10 +1,11 @@
-import 'package:markethub/common/widgets/loader.dart';
+import 'package:markethub/common/widgets/shimmer_loader.dart';
 import 'package:markethub/constants/global_variables.dart';
 import 'package:markethub/features/account/services/account_services.dart';
 import 'package:markethub/features/order_details/screens/order_details_screen.dart';
 import 'package:markethub/models/order.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class YourOrdersScreen extends StatefulWidget {
   static const String routeName = '/your-orders';
@@ -50,16 +51,28 @@ class _YourOrdersScreenState extends State<YourOrdersScreen> {
         ),
       ),
       body: orders == null
-          ? const Loader()
+          ? ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: 3,
+              itemBuilder: (context, index) => Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: ShimmerLoader(width: double.infinity, height: 150, borderRadius: 20),
+              ),
+            )
           : orders!.isEmpty
               ? _buildEmptyOrders()
-              : ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: orders!.length,
-                  itemBuilder: (context, index) {
-                    final order = orders![index];
-                    return _buildOrderCard(order);
+              : RefreshIndicator(
+                  onRefresh: () async {
+                    fetchOrders();
                   },
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: orders!.length,
+                    itemBuilder: (context, index) {
+                      final order = orders![index];
+                      return _buildOrderCard(order);
+                    },
+                  ),
                 ),
     );
   }
@@ -118,11 +131,12 @@ class _YourOrdersScreenState extends State<YourOrdersScreen> {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: Image.network(
-                      order.products[0].images[0],
+                    child: CachedNetworkImage(
+                      imageUrl: order.products[0].images[0],
                       height: 80,
                       width: 80,
                       fit: BoxFit.cover,
+                      placeholder: (context, url) => const ShimmerLoader(width: 80, height: 80, borderRadius: 12),
                     ),
                   ),
                   const SizedBox(width: 16),

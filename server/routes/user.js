@@ -6,6 +6,7 @@ const Order = require("../models/order");
 const { Product } = require("../models/product");
 const User = require("../models/user");
 const Notification = require("../models/notification");
+const sendResponse = require("../utils/responseHelper");
 
 // Save User Address
 userRouter.post("/api/save-user-address", auth, async (req, res) => {
@@ -14,9 +15,9 @@ userRouter.post("/api/save-user-address", auth, async (req, res) => {
         let user = await User.findById(req.user);
         user.address = address;
         user = await user.save();
-        res.json(user);
+        return sendResponse(res, 200, true, "Address updated successfully", user);
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        return sendResponse(res, 500, false, e.message);
     }
 });
 
@@ -62,11 +63,11 @@ userRouter.post("/api/order", auth, async (req, res) => {
         await session.commitTransaction();
         session.endSession();
 
-        res.json(order);
+        return sendResponse(res, 200, true, "Order placed successfully", order);
     } catch (e) {
         await session.abortTransaction();
         session.endSession();
-        res.status(400).json({ error: e.message }); // 400 for logic errors
+        return sendResponse(res, 400, false, e.message);
     }
 });
 
@@ -74,9 +75,9 @@ userRouter.post("/api/order", auth, async (req, res) => {
 userRouter.get("/api/orders/me", auth, async (req, res) => {
     try {
         const orders = await Order.find({ userId: req.user });
-        res.json(orders);
+        return sendResponse(res, 200, true, "Orders fetched", orders);
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        return sendResponse(res, 500, false, e.message);
     }
 });
 
@@ -136,9 +137,9 @@ userRouter.post("/api/top-up-wallet", auth, async (req, res) => {
         let user = await User.findById(req.user);
         user.wallet += amount;
         user = await user.save();
-        res.json(user);
+        return sendResponse(res, 200, true, "Wallet topped up", user);
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        return sendResponse(res, 500, false, e.message);
     }
 });
 

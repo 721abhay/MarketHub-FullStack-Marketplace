@@ -1,11 +1,34 @@
 import 'package:markethub/features/finance/screens/crypto_vault_screen.dart';
 import 'package:markethub/features/finance/screens/insurance_screen.dart';
 import 'package:markethub/features/finance/screens/stock_tracker_screen.dart';
+import 'package:markethub/features/finance/services/finance_services.dart';
+import 'package:markethub/models/service_models.dart';
+import 'package:markethub/common/widgets/loader.dart';
 import 'package:flutter/material.dart';
 
-class FinanceHomeScreen extends StatelessWidget {
+class FinanceHomeScreen extends StatefulWidget {
   static const String routeName = '/finance-home';
   const FinanceHomeScreen({super.key});
+
+  @override
+  State<FinanceHomeScreen> createState() => _FinanceHomeScreenState();
+}
+
+class _FinanceHomeScreenState extends State<FinanceHomeScreen> {
+  final FinanceServices financeServices = FinanceServices();
+  List<FinanceOffering>? financeOfferings;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchFinanceOfferings();
+  }
+
+  void fetchFinanceOfferings() async {
+    financeOfferings =
+        await financeServices.fetchFinanceOfferings(context: context);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +41,10 @@ class FinanceHomeScreen extends StatelessWidget {
           _buildQuickActions(context),
           _buildSectionHeader('Markets'),
           _buildMarketOverview(),
+          _buildSectionHeader('Premium Offers'),
+          financeOfferings == null
+              ? const SliverToBoxAdapter(child: Loader())
+              : _buildOfferingsList(),
           _buildSectionHeader('Financial Services'),
           _buildServiceList(context),
           const SliverToBoxAdapter(child: SizedBox(height: 100)),
@@ -31,9 +58,12 @@ class FinanceHomeScreen extends StatelessWidget {
       backgroundColor: const Color(0xFF1E293B),
       pinned: true,
       expandedHeight: 80,
-      title: const Text('Finance Hub', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+      title: const Text('Finance Hub',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
       actions: [
-        IconButton(icon: const Icon(Icons.security_rounded, color: Colors.white70), onPressed: () {}),
+        IconButton(
+            icon: const Icon(Icons.security_rounded, color: Colors.white70),
+            onPressed: () {}),
       ],
     );
   }
@@ -44,22 +74,40 @@ class FinanceHomeScreen extends StatelessWidget {
         margin: const EdgeInsets.all(20),
         padding: const EdgeInsets.all(32),
         decoration: BoxDecoration(
-          gradient: const LinearGradient(colors: [Color(0xFF334155), Color(0xFF0F172A)]),
+          gradient: const LinearGradient(
+              colors: [Color(0xFF334155), Color(0xFF0F172A)]),
           borderRadius: BorderRadius.circular(32),
-          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 20, offset: const Offset(0, 10))],
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black.withValues(alpha: 0.1),
+                blurRadius: 20,
+                offset: const Offset(0, 10))
+          ],
         ),
         child: const Column(
           children: [
-            Text('Estimated Net Worth', style: TextStyle(color: Colors.white60, fontSize: 13, fontWeight: FontWeight.bold)),
+            Text('Estimated Net Worth',
+                style: TextStyle(
+                    color: Colors.white60,
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold)),
             SizedBox(height: 8),
-            Text('\$42,850.00', style: TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.bold)),
+            Text('\$42,850.00',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 36,
+                    fontWeight: FontWeight.bold)),
             SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.trending_up, color: Colors.greenAccent, size: 16),
                 SizedBox(width: 4),
-                Text('+2.4% Today', style: TextStyle(color: Colors.greenAccent, fontSize: 12, fontWeight: FontWeight.bold)),
+                Text('+2.4% Today',
+                    style: TextStyle(
+                        color: Colors.greenAccent,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold)),
               ],
             ),
           ],
@@ -90,11 +138,21 @@ class FinanceHomeScreen extends StatelessWidget {
       children: [
         Container(
           padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle, boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10)]),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05), blurRadius: 10)
+              ]),
           child: Icon(icon, color: const Color(0xFF6366F1)),
         ),
         const SizedBox(height: 8),
-        Text(label, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF64748B))),
+        Text(label,
+            style: const TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF64748B))),
       ],
     );
   }
@@ -103,7 +161,11 @@ class FinanceHomeScreen extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(24, 32, 24, 16),
-        child: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1E293B))),
+        child: Text(title,
+            style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF1E293B))),
       ),
     );
   }
@@ -130,15 +192,68 @@ class FinanceHomeScreen extends StatelessWidget {
       width: 140,
       margin: const EdgeInsets.only(right: 12),
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24), border: Border.all(color: const Color(0xFFE2E8F0))),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: const Color(0xFFE2E8F0))),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(name, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey)),
+          Text(name,
+              style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey)),
           const Spacer(),
-          Text(val, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-          Text(change, style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: isUp ? Colors.green : Colors.red)),
+          Text(val,
+              style:
+                  const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+          Text(change,
+              style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                  color: isUp ? Colors.green : Colors.red)),
         ],
+      ),
+    );
+  }
+
+  Widget _buildOfferingsList() {
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            final offering = financeOfferings![index];
+            return Container(
+              margin: const EdgeInsets.only(bottom: 12),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: const Color(0xFFE2E8F0))),
+              child: ListTile(
+                contentPadding: const EdgeInsets.all(20),
+                leading: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                      color: const Color(0xFFF0FDF4),
+                      borderRadius: BorderRadius.circular(14)),
+                  child: const Icon(Icons.star_rounded, color: Colors.green),
+                ),
+                title: Text(offering.name,
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                subtitle: Text('Min Deposit: \$${offering.minDeposit}',
+                    style: const TextStyle(fontSize: 12)),
+                trailing: Text(offering.rate,
+                    style: const TextStyle(
+                        color: Colors.green,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16)),
+              ),
+            );
+          },
+          childCount: financeOfferings!.length,
+        ),
       ),
     );
   }
@@ -148,26 +263,52 @@ class FinanceHomeScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       sliver: SliverList(
         delegate: SliverChildListDelegate([
-          _buildServiceTile(Icons.trending_up_rounded, 'Stock Market', 'Invest in global equities', () => Navigator.pushNamed(context, StockTrackerScreen.routeName)),
-          _buildServiceTile(Icons.currency_bitcoin_rounded, 'Crypto Vault', 'Trade & Store digital assets', () => Navigator.pushNamed(context, CryptoVaultScreen.routeName)),
-          _buildServiceTile(Icons.umbrella_rounded, 'Insurance', 'Protect your life and assets', () => Navigator.pushNamed(context, InsuranceCenterScreen.routeName)),
+          _buildServiceTile(
+              Icons.trending_up_rounded,
+              'Stock Market',
+              'Invest in global equities',
+              () => Navigator.pushNamed(context, StockTrackerScreen.routeName)),
+          _buildServiceTile(
+              Icons.currency_bitcoin_rounded,
+              'Crypto Vault',
+              'Trade & Store digital assets',
+              () => Navigator.pushNamed(context, CryptoVaultScreen.routeName)),
+          _buildServiceTile(
+              Icons.umbrella_rounded,
+              'Insurance',
+              'Protect your life and assets',
+              () =>
+                  Navigator.pushNamed(context, InsuranceCenterScreen.routeName)),
         ]),
       ),
     );
   }
 
-  Widget _buildServiceTile(IconData icon, String title, String subtitle, VoidCallback onTap) {
+  Widget _buildServiceTile(
+      IconData icon, String title, String subtitle, VoidCallback onTap) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), border: Border.all(color: const Color(0xFFE2E8F0))),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: const Color(0xFFE2E8F0))),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-        leading: Container(padding: const EdgeInsets.all(12), decoration: BoxDecoration(color: const Color(0xFFEEF2FF), borderRadius: BorderRadius.circular(14)), child: Icon(icon, color: const Color(0xFF6366F1))),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-        subtitle: Text(subtitle, style: const TextStyle(fontSize: 11, color: Colors.grey)),
-        trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: Colors.grey),
+        leading: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+                color: const Color(0xFFEEF2FF),
+                borderRadius: BorderRadius.circular(14)),
+            child: Icon(icon, color: const Color(0xFF6366F1))),
+        title: Text(title,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+        subtitle: Text(subtitle,
+            style: const TextStyle(fontSize: 11, color: Colors.grey)),
+        trailing: const Icon(Icons.arrow_forward_ios_rounded,
+            size: 14, color: Colors.grey),
         onTap: onTap,
       ),
     );
   }
 }
+

@@ -1,4 +1,4 @@
-import 'package:markethub/common/widgets/loader.dart';
+import 'package:markethub/common/widgets/shimmer_loader.dart';
 import 'package:markethub/constants/global_variables.dart';
 import 'package:markethub/features/product_details/screens/product_details_screen.dart';
 import 'package:markethub/features/search/screens/filter_screen.dart'; // Added
@@ -120,7 +120,17 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       ),
       body: products == null
-          ? const Loader()
+          ? GridView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: 6,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 0.65,
+                mainAxisSpacing: 16,
+                crossAxisSpacing: 16,
+              ),
+              itemBuilder: (context, index) => const ShimmerLoader(width: double.infinity, height: double.infinity, borderRadius: 20),
+            )
           : Column(
               children: [
                 // Filter Bar

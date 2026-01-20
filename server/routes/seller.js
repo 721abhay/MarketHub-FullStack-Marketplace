@@ -7,10 +7,24 @@ const Notification = require("../models/notification");
 const Payout = require("../models/payout");
 const User = require("../models/user");
 
+// Helper for standardized responses
+const sendResponse = (res, status, success, message, data = null) => {
+    return res.status(status).json({
+        success,
+        message,
+        data,
+    });
+};
+
 // Seller Add Product
 sellerRouter.post("/seller/add-product", seller, async (req, res) => {
     try {
         const { name, description, images, quantity, price, category } = req.body;
+
+        if (!name || name.length < 3) return sendResponse(res, 400, false, "Product name is too short.");
+        if (price <= 0) return sendResponse(res, 400, false, "Price must be positive.");
+        if (quantity < 0) return sendResponse(res, 400, false, "Quantity cannot be negative.");
+
         let product = new Product({
             name,
             description,
@@ -21,23 +35,23 @@ sellerRouter.post("/seller/add-product", seller, async (req, res) => {
             sellerId: req.user,
         });
         product = await product.save();
-        res.json(product);
+        return sendResponse(res, 201, true, "Product added successfully", product);
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        return sendResponse(res, 500, false, e.message);
     }
 });
 
-// Get all products by seller
+// Get products by seller
 sellerRouter.get("/seller/get-products/:sellerId", seller, async (req, res) => {
     try {
         const products = await Product.find({ sellerId: req.params.sellerId });
-        res.json(products);
+        return sendResponse(res, 200, true, "Products fetched", products);
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        return sendResponse(res, 500, false, e.message);
     }
 });
 
-// Advanced Analytics (Phase 4)
+// Analytics
 sellerRouter.get("/seller/analytics/:sellerId", seller, async (req, res) => {
     try {
         const sellerId = req.params.sellerId;
@@ -46,14 +60,13 @@ sellerRouter.get("/seller/analytics/:sellerId", seller, async (req, res) => {
 
         let totalEarnings = 0;
         let cityData = {};
-        let dailyRevenue = {}; // Last 7 days
+        let dailyRevenue = {};
         let productVelocity = {};
 
         const now = new Date().getTime();
         const sevenDaysAgo = now - (7 * 24 * 60 * 60 * 1000);
 
         orders.forEach(order => {
-            // Heatmap calculation
             const addressParts = order.address.split(',');
             if (addressParts.length > 2) {
                 const cityPart = addressParts[addressParts.length - 1].split('-')[0].trim();
@@ -66,29 +79,23 @@ sellerRouter.get("/seller/analytics/:sellerId", seller, async (req, res) => {
                     const qty = p.quantity;
                     totalEarnings += (price * qty);
 
-                    // Daily Revenue (Last 7 days)
                     if (order.orderedAt > sevenDaysAgo) {
                         const date = new Date(order.orderedAt).toLocaleDateString();
                         dailyRevenue[date] = (dailyRevenue[date] || 0) + (price * qty);
                     }
-
-                    // Product Velocity
                     productVelocity[p.product._id] = (productVelocity[p.product._id] || 0) + qty;
                 }
             });
         });
 
-        // Top Regions
         const sortedRegions = Object.entries(cityData)
             .sort((a, b) => b[1] - a[1])
             .slice(0, 5)
             .map(entry => ({ name: entry[0], count: entry[1] }));
 
-        // Inventory AI Insights
         const inventoryInsights = products.map(p => {
             const soldTotal = productVelocity[p._id] || 0;
-            const daysActive = 30; // Assuming 30-day window for velocity
-            const velocityPerDay = soldTotal / daysActive;
+            const velocityPerDay = soldTotal / 30;
             const daysLeft = velocityPerDay > 0 ? Math.floor(p.quantity / velocityPerDay) : 999;
 
             return {
@@ -101,7 +108,7 @@ sellerRouter.get("/seller/analytics/:sellerId", seller, async (req, res) => {
             };
         });
 
-        res.json({
+        return sendResponse(res, 200, true, "Analytics fetched", {
             totalEarnings,
             totalProducts: products.length,
             totalOrders: orders.length,
@@ -110,19 +117,20 @@ sellerRouter.get("/seller/analytics/:sellerId", seller, async (req, res) => {
             inventoryInsights
         });
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        return sendResponse(res, 500, false, e.message);
     }
 });
 
-// Update Order Status (Phase 2)
+// Update Order Status
 sellerRouter.post("/seller/update-order-status", seller, async (req, res) => {
     try {
         const { id, status } = req.body;
         let order = await Order.findById(id);
+        if (!order) return sendResponse(res, 404, false, "Order not found.");
+
         order.status = status;
         order = await order.save();
 
-        // Create notification for user
         const statusNames = ['Pending', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled'];
         let notification = new Notification({
             userId: order.userId,
@@ -134,21 +142,17 @@ sellerRouter.post("/seller/update-order-status", seller, async (req, res) => {
         await notification.save();
 
         if (status === 3) {
-            // Update seller wallet
             let sellerUser = await User.findById(req.user);
-            let earnings = 0;
-            order.products.forEach((p) => {
-                if (p.sellerId === req.user) {
-                    earnings += p.quantity * p.product.price;
-                }
-            });
+            let earnings = order.products.reduce((sum, p) => {
+                return p.sellerId === req.user ? sum + (p.quantity * p.product.price) : sum;
+            }, 0);
             sellerUser.wallet += earnings;
             await sellerUser.save();
         }
 
-        res.json(order);
+        return sendResponse(res, 200, true, "Order status updated", order);
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        return sendResponse(res, 500, false, e.message);
     }
 });
 
@@ -156,9 +160,9 @@ sellerRouter.post("/seller/update-order-status", seller, async (req, res) => {
 sellerRouter.get("/seller/get-orders/:sellerId", seller, async (req, res) => {
     try {
         const orders = await Order.find({ "products.sellerId": req.params.sellerId });
-        res.json(orders);
+        return sendResponse(res, 200, true, "Orders fetched", orders);
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        return sendResponse(res, 500, false, e.message);
     }
 });
 
@@ -168,33 +172,32 @@ sellerRouter.post("/seller/request-payout", seller, async (req, res) => {
         const { amount, bankDetails } = req.body;
         let user = await User.findById(req.user);
 
-        if (user.wallet < amount) {
-            return res.status(400).json({ msg: "Insufficient balance in wallet!" });
-        }
+        if (!amount || amount <= 0) return sendResponse(res, 400, false, "Invalid payout amount.");
+        if (user.wallet < amount) return sendResponse(res, 400, false, "Insufficient wallet balance.");
 
         user.wallet -= amount;
         await user.save();
 
-        let payout = new Payout({
+        const payout = new Payout({
             sellerId: req.user,
             amount,
             bankDetails,
             requestedAt: new Date().getTime(),
         });
-        payout = await payout.save();
-        res.json(user);
+        await payout.save();
+        return sendResponse(res, 200, true, "Payout requested successfully", user);
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        return sendResponse(res, 500, false, e.message);
     }
 });
 
-// Get Payout History
+// Payout History
 sellerRouter.get("/seller/payouts/:sellerId", seller, async (req, res) => {
     try {
         const payouts = await Payout.find({ sellerId: req.params.sellerId }).sort({ requestedAt: -1 });
-        res.json(payouts);
+        return sendResponse(res, 200, true, "Payout history fetched", payouts);
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        return sendResponse(res, 500, false, e.message);
     }
 });
 

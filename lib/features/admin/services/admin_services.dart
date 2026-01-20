@@ -27,12 +27,12 @@ class AdminServices {
         response: res,
         context: context,
         onSuccess: () {
-          for (int i = 0; i < jsonDecode(res.body).length; i++) {
+          final responseData = jsonDecode(res.body);
+          final List<dynamic> data = responseData['data'];
+          for (int i = 0; i < data.length; i++) {
             userList.add(
               User.fromJson(
-                jsonEncode(
-                  jsonDecode(res.body)[i],
-                ),
+                jsonEncode(data[i]),
               ),
             );
           }
@@ -92,7 +92,8 @@ class AdminServices {
         response: res,
         context: context,
         onSuccess: () {
-          analytics = jsonDecode(res.body);
+          final responseData = jsonDecode(res.body);
+          analytics = responseData['data'];
         },
       );
     } catch (e) {
@@ -118,12 +119,12 @@ class AdminServices {
         response: res,
         context: context,
         onSuccess: () {
-          for (int i = 0; i < jsonDecode(res.body).length; i++) {
+          final responseData = jsonDecode(res.body);
+          final List<dynamic> data = responseData['data'];
+          for (int i = 0; i < data.length; i++) {
             productList.add(
               Product.fromJson(
-                jsonEncode(
-                  jsonDecode(res.body)[i],
-                ),
+                jsonEncode(data[i]),
               ),
             );
           }

@@ -8,7 +8,7 @@ class RewardsCatalogScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(title: const Text('MarketHub Rewards'), backgroundColor: const Color(0xFFFFD700).withValues(alpha: 0.9), foregroundColor: Colors.black),
+      appBar: AppBar(title: const Text('MarketHub Rewards'), backgroundColor: Color(0xFFFFD700).withValues(alpha: 0.9), foregroundColor: Colors.black),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(

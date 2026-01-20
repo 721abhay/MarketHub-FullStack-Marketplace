@@ -77,8 +77,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
-      body: CustomScrollView(
-        slivers: [
+      body: RefreshIndicator(
+        onRefresh: () async {
+           // Simulate a refresh delay
+           await Future.delayed(const Duration(seconds: 1));
+           if (mounted) setState(() {});
+        },
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
           SliverAppBar(
             expandedHeight: 120,
             floating: true,
@@ -162,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       CircleAvatar(
                         radius: 28,
-                        backgroundColor: const Color(0xFF6366F1).withValues(alpha: 0.1),
+                        backgroundColor: Color(0xFF6366F1).withValues(alpha: 0.1),
                         child: const Icon(Icons.person_outline_rounded, color: Color(0xFF6366F1)),
                       ),
                     ],
@@ -198,7 +205,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-        ],
+          ],
+        ),
       ),
       floatingActionButton: const _AISupportFAB(),
     );
@@ -217,7 +225,7 @@ class _HomeScreenState extends State<HomeScreen> {
         borderRadius: BorderRadius.circular(32),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF6366F1).withValues(alpha: 0.2),
+            color: Color(0xFF6366F1).withValues(alpha: 0.2),
             blurRadius: 30,
             offset: const Offset(0, 15),
           ),
@@ -300,7 +308,7 @@ class _AISupportFAB extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF6366F1).withValues(alpha: 0.3),
+            color: Color(0xFF6366F1).withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),

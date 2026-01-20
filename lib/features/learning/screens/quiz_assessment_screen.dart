@@ -45,7 +45,7 @@ class _QuizAssessmentScreenState extends State<QuizAssessmentScreen> {
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(color: isSelected ? const Color(0xFF6366F1).withValues(alpha: 0.1) : Colors.white, borderRadius: BorderRadius.circular(16), border: Border.all(color: isSelected ? const Color(0xFF6366F1) : Colors.grey[300]!)),
+        decoration: BoxDecoration(color: isSelected ? Color(0xFF6366F1).withValues(alpha: 0.1) : Colors.white, borderRadius: BorderRadius.circular(16), border: Border.all(color: isSelected ? const Color(0xFF6366F1) : Colors.grey[300]!)),
         child: Row(
           children: [
             CircleAvatar(radius: 12, backgroundColor: isSelected ? const Color(0xFF6366F1) : Colors.grey[200], child: Text(String.fromCharCode(65 + index), style: TextStyle(color: isSelected ? Colors.white : Colors.black87, fontSize: 12, fontWeight: FontWeight.bold))),

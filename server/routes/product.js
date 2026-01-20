@@ -2,16 +2,25 @@ const express = require("express");
 const productRouter = express.Router();
 const { Product } = require("../models/product");
 
+// Helper for standardized responses
+const sendResponse = (res, status, success, message, data = null) => {
+    return res.status(status).json({
+        success,
+        message,
+        data,
+    });
+};
+
 // Fetch products by category
 productRouter.get("/api/products", async (req, res) => {
-    console.log('📦 Product Fetch Request:', req.query);
     try {
-        const products = await Product.find({ category: req.query.category });
-        console.log(`✅ Found ${products.length} products for category: ${req.query.category}`);
-        res.json(products);
+        const { category } = req.query;
+        if (!category) return sendResponse(res, 400, false, "Category is required.");
+
+        const products = await Product.find({ category });
+        return sendResponse(res, 200, true, `${products.length} products fetched for ${category}`, products);
     } catch (e) {
-        console.log('❌ Product Fetch Error:', e.message);
-        res.status(500).json({ error: e.message });
+        return sendResponse(res, 500, false, e.message);
     }
 });
 
@@ -29,46 +38,39 @@ productRouter.get("/api/products/search/:name", async (req, res) => {
             name: { $regex: req.params.name, $options: "i" },
         }).sort(sortOptions);
 
-        res.json(products);
+        return sendResponse(res, 200, true, "Search completed", products);
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        return sendResponse(res, 500, false, e.message);
     }
 });
 
-// Get recommended products by category
+// Recommendations
 productRouter.get("/api/products/recommendations/:category", async (req, res) => {
     try {
         const products = await Product.find({
             category: req.params.category,
         }).limit(10);
-        res.json(products);
+        return sendResponse(res, 200, true, "Recommendations fetched", products);
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        return sendResponse(res, 500, false, e.message);
     }
 });
 
-// Deal of the day logic
+// Deal of the day
 productRouter.get("/api/deal-of-day", async (req, res) => {
     try {
         let products = await Product.find({});
+        if (products.length === 0) return sendResponse(res, 404, false, "No products found for deal of day.");
 
         products = products.sort((a, b) => {
-            let aSum = 0;
-            let bSum = 0;
-
-            for (let i = 0; i < a.ratings.length; i++) {
-                aSum += a.ratings[i].rating;
-            }
-
-            for (let i = 0; i < b.ratings.length; i++) {
-                bSum += b.ratings[i].rating;
-            }
+            let aSum = (a.ratings || []).reduce((sum, r) => sum + r.rating, 0);
+            let bSum = (b.ratings || []).reduce((sum, r) => sum + r.rating, 0);
             return aSum < bSum ? 1 : -1;
         });
 
-        res.json(products[0]);
+        return sendResponse(res, 200, true, "Deal of the day fetched", products[0]);
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        return sendResponse(res, 500, false, e.message);
     }
 });
 

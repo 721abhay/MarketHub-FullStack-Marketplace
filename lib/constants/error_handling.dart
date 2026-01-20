@@ -8,15 +8,21 @@ void httpErrorHandle({
   required BuildContext context,
   required VoidCallback onSuccess,
 }) {
+  final responseData = jsonDecode(response.body);
+  final String message = responseData['message'] ?? responseData['msg'] ?? responseData['error'] ?? 'An unknown error occurred';
+
   switch (response.statusCode) {
     case 200:
+    case 201:
       onSuccess();
       break;
     case 400:
-      showSnackBar(context, jsonDecode(response.body)['msg']);
+    case 401:
+    case 404:
+      showSnackBar(context, message);
       break;
     case 500:
-      showSnackBar(context, jsonDecode(response.body)['error']);
+      showSnackBar(context, message);
       break;
     default:
       showSnackBar(context, response.body);

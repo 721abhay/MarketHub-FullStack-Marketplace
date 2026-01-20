@@ -139,7 +139,7 @@ class _RealEstateHomeScreenState extends State<RealEstateHomeScreen> {
                   left: 16,
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(color: const Color(0xFF1E293B).withValues(alpha: 0.8), borderRadius: BorderRadius.circular(8)),
+                    decoration: BoxDecoration(color: Color(0xFF1E293B).withValues(alpha: 0.8), borderRadius: BorderRadius.circular(8)),
                     child: Text(property.type, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
                   ),
                 ),

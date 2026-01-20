@@ -153,15 +153,33 @@ class _AddressScreenState extends State<AddressScreen> {
                 key: _addressFormKey,
                 child: Column(
                   children: [
-                    _buildInputField(flatBuildingController, 'Flat, House no, Building', Icons.home_rounded),
+                    CustomTextField(
+                      controller: flatBuildingController, 
+                      hintText: 'Flat, House no, Building', 
+                      prefixIcon: Icons.home_rounded,
+                    ),
                     const SizedBox(height: 12),
-                    _buildInputField(areaController, 'Area, Street', Icons.map_rounded),
+                    CustomTextField(
+                      controller: areaController, 
+                      hintText: 'Area, Street', 
+                      prefixIcon: Icons.map_rounded,
+                    ),
                     const SizedBox(height: 12),
                     Row(
                       children: [
-                        Expanded(child: _buildInputField(pincodeController, 'Pincode', Icons.pin_drop_rounded)),
+                        Expanded(child: CustomTextField(
+                          controller: pincodeController, 
+                          hintText: 'Pincode', 
+                          prefixIcon: Icons.pin_drop_rounded,
+                          keyboardType: TextInputType.number,
+                          validator: (val) => val != null && val.length == 6 ? null : 'Enter 6-digit pincode',
+                        )),
                         const SizedBox(width: 12),
-                        Expanded(child: _buildInputField(cityController, 'Town/City', Icons.location_city_rounded)),
+                        Expanded(child: CustomTextField(
+                          controller: cityController, 
+                          hintText: 'Town/City', 
+                          prefixIcon: Icons.location_city_rounded,
+                        )),
                       ],
                     ),
                   ],
@@ -185,6 +203,7 @@ class _AddressScreenState extends State<AddressScreen> {
                       child: CustomTextField(
                         controller: _promoController,
                         hintText: 'Enter code (e.g. WELCOME40)',
+                        prefixIcon: Icons.local_offer_outlined,
                       ),
                     ),
                   ),
@@ -259,19 +278,6 @@ class _AddressScreenState extends State<AddressScreen> {
     );
   }
 
-  Widget _buildInputField(TextEditingController controller, String hint, IconData icon) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 10, offset: const Offset(0, 4))],
-      ),
-      child: CustomTextField(
-        controller: controller,
-        hintText: hint,
-      ),
-    );
-  }
 
   Widget _buildPaymentCard(String value, String title, IconData icon) {
     bool isSelected = paymentMethod == value;

@@ -44,7 +44,8 @@ const userSchema = mongoose.Schema({
     cart: [
         {
             product: {
-                type: Object,
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Product",
             },
             quantity: {
                 type: Number,
@@ -55,7 +56,8 @@ const userSchema = mongoose.Schema({
     recentlyViewed: [
         {
             product: {
-                type: Object,
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Product",
             },
             viewedAt: {
                 type: Number,
@@ -66,7 +68,8 @@ const userSchema = mongoose.Schema({
     wishlist: [
         {
             product: {
-                type: Object,
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Product",
             },
         },
     ],

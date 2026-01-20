@@ -24,7 +24,7 @@ class PrimeVideoHomeScreen extends StatelessWidget {
 
   Widget _buildEntertainmentAppBar() {
     return SliverAppBar(
-      backgroundColor: const Color(0xFF0F171E).withValues(alpha: 0.9),
+      backgroundColor: Color(0xFF0F171E).withValues(alpha: 0.9),
       pinned: true,
       title: const Text('MarketHub Video', style: TextStyle(color: Color(0xFF00A8E1), fontWeight: FontWeight.bold)),
       actions: [IconButton(icon: const Icon(Icons.cast, color: Colors.white), onPressed: () {}), IconButton(icon: const Icon(Icons.person_outline, color: Colors.white), onPressed: () {})],

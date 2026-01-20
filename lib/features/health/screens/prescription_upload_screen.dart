@@ -42,7 +42,7 @@ class _PrescriptionUploadScreenState extends State<PrescriptionUploadScreen> {
       decoration: BoxDecoration(
         color: Colors.blue[50],
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: const Color(0xFF0EA5E9).withValues(alpha: 0.3), width: 2, style: BorderStyle.solid),
+        border: Border.all(color: Color(0xFF0EA5E9).withValues(alpha: 0.3), width: 2, style: BorderStyle.solid),
       ),
       child: const Column(
         mainAxisAlignment: MainAxisAlignment.center,

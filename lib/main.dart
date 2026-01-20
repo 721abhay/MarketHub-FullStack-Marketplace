@@ -1,4 +1,4 @@
-import 'package:markethub/common/widgets/bottom_bar.dart';
+import 'package:markethub/features/auth/screens/splash_screen.dart';
 import 'package:markethub/common/widgets/error_boundary.dart';
 import 'package:markethub/features/auth/services/auth_service.dart';
 import 'package:markethub/providers/user_provider.dart';
@@ -32,7 +32,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    authService.getUserData(context);
   }
 
   @override
@@ -44,7 +43,7 @@ class _MyAppState extends State<MyApp> {
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
       onGenerateRoute: (settings) => AppRouter.onGenerateRoute(settings),
-      home: const BottomBar(), // Temporarily bypassing auth for preview
+      home: const SplashScreen(),
       /* home: Provider.of<UserProvider>(context).user.token.isNotEmpty
           ? const BottomBar()
           : const AuthScreen(), */

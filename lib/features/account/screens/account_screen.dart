@@ -7,6 +7,7 @@ import 'package:markethub/features/account/screens/edit_profile_screen.dart'; //
 import 'package:markethub/features/account/screens/help_center_screen.dart'; // Added
 import 'package:markethub/features/account/screens/loyalty_points_screen.dart'; // Added
 import 'package:markethub/features/account/screens/referral_screen.dart'; // Added
+import 'package:markethub/features/account/screens/gift_cards_screen.dart'; // Added
 import 'package:markethub/features/account/screens/safety_center_screen.dart'; // Added
 import 'package:markethub/features/account/screens/coupons_screen.dart'; // Added
 import 'package:markethub/features/content/screens/legal/privacy_policy_screen.dart'; // Added
@@ -18,6 +19,7 @@ import 'package:markethub/features/account/screens/feedback_screen.dart'; // Add
 import 'package:markethub/features/account/screens/settings_screen.dart';
 import 'package:markethub/features/hub/screens/plus_subscription_screen.dart';
 import 'package:markethub/features/auth/screens/auth_screen.dart';
+import 'package:markethub/features/seller/screens/merchant_onboarding_screen.dart';
 import 'package:markethub/providers/user_provider.dart';
 import 'package:markethub/providers/localization_provider.dart';
 import 'package:markethub/localization/language_constants.dart';
@@ -141,6 +143,9 @@ class AccountScreen extends StatelessWidget {
                     _SettingsItem(Icons.monetization_on_outlined, 'MarketHub Coins', 'Rewards & Redemptions', onTap: () => Navigator.pushNamed(context, LoyaltyPointsScreen.routeName)),
                     _SettingsItem(Icons.person_outline, 'Personal Information', 'Name, Email, Phone', onTap: () => Navigator.pushNamed(context, EditProfileScreen.routeName)),
                     _SettingsItem(Icons.card_giftcard_rounded, 'My Coupons', 'Discounts & Offers', onTap: () => Navigator.pushNamed(context, CouponsScreen.routeName)),
+                    _SettingsItem(Icons.card_membership_rounded, 'Gift Cards', 'Digital balance & redemption', onTap: () => Navigator.pushNamed(context, GiftCardsScreen.routeName)),
+                    if (user.type == 'user')
+                      _SettingsItem(Icons.storefront_rounded, 'Become a Seller', 'Start selling on MarketHub', onTap: () => Navigator.pushNamed(context, MerchantOnboardingScreen.routeName)),
                     _SettingsItem(Icons.security_outlined, 'Security', 'Password, 2-Step Verification', onTap: () => Navigator.pushNamed(context, SafetyCenterScreen.routeName)),
                      _SettingsItem(Icons.group_add_outlined, 'Invite Friends', 'Get \$50 for every friend', onTap: () => Navigator.pushNamed(context, ReferralScreen.routeName)),
                     _SettingsItem(Icons.language_rounded, 'App Language', 'English, Spanish, Hindi', onTap: () => _showLanguageDialog(context)),

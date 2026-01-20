@@ -65,7 +65,7 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    const Color(0xFF6366F1).withValues(alpha: 0.1),
+                    Color(0xFF6366F1).withValues(alpha: 0.1),
                     const Color(0xFFF8FAFC),
                   ],
                   begin: Alignment.topCenter,
@@ -182,7 +182,7 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
             const Text('Inventory AI', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1E293B))),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(color: const Color(0xFF10B981).withValues(alpha: 0.1), borderRadius: BorderRadius.circular(10)),
+              decoration: BoxDecoration(color: Color(0xFF10B981).withValues(alpha: 0.1), borderRadius: BorderRadius.circular(10)),
               child: const Text('SMART PREDICTIONS', style: TextStyle(color: Color(0xFF059669), fontSize: 9, fontWeight: FontWeight.bold)),
             ),
           ],
